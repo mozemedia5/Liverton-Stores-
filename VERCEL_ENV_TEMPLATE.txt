@@ -1,7 +1,8 @@
 # Minimal Liverton storefront Vercel contract
 # Add required names in both Preview and Production. Enter values only in Vercel.
 
-# Shared database and Manus auth
+# Shared Liverton/Manus backend and auth — copy these exact values
+# from the existing Liverton project; Firebase does not provide them.
 DATABASE_URL=
 JWT_SECRET=
 VITE_APP_ID=
@@ -19,7 +20,9 @@ SHOPIFY_STOREFRONT_API_ACCESS_TOKEN=
 # CLOUDINARY_API_SECRET=
 # CLOUDINARY_UPLOAD_PRESET=liverton_admin_media
 
-# Shared Firebase web configuration as one JSON value
+# Firebase Console → Project settings → Your apps → Web app configuration
+# Put apiKey, authDomain, databaseURL (if enabled), projectId,
+# storageBucket, messagingSenderId, and appId into this one JSON value.
 VITE_FIREBASE_CONFIG_JSON={"apiKey":"...","authDomain":"...","projectId":"...","storageBucket":"...","messagingSenderId":"...","appId":"..."}
 
 # Optional only when the related storefront feature is enabled

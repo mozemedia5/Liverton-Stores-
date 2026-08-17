@@ -139,3 +139,6 @@
 
 - [x] Capture Admin-Store desktop review and verify tablet/mobile sidebar, tables, and form behavior through the responsive breakpoint audit
 - [x] Add an Admin-Store-specific responsive verification note documenting the checked breakpoints and key workflows
+
+- [x] Clarify Firebase-provided configuration versus Manus/shared-backend variables in both deployment guides and templates
+- [x] Synchronize the clarified variable documentation and verify both repositories

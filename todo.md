@@ -33,6 +33,17 @@
 - [x] Run the Shopify probe and smoke tests after the storefront wiring is complete
 - [x] Retry and complete the interrupted Liverton storefront implementation from this clean checkpoint
 
-- [ ] Export the current Liverton storefront into the target GitHub repository
-- [ ] Add Vercel-compatible project configuration and deployment documentation
-- [ ] Verify build, repository structure, commit, and pushed remote branch
+- [x] Export the current Liverton storefront into the target GitHub repository
+- [x] Add Vercel-compatible project configuration and deployment documentation
+- [x] Verify build, repository structure, commit, and pushed remote branch
+- [x] Make every footer link route to a real in-app page instead of leaving users in the footer section
+- [x] Add a dedicated in-app Contact page with Email and WhatsApp options
+- [x] Add an email contact form addressed to livertoncodes@gmail.com without navigating away from the app
+- [x] Add an in-app WhatsApp message composer for +256705954597 with a clear handoff to WhatsApp delivery
+- [x] Add configurable home dashboard banner slots for videos, announcements, and promotional content
+- [x] Add tests for footer routes, contact form states, WhatsApp handoff, and dashboard banner rendering
+- [x] Use the built-in owner-notification channel for keyless contact submissions and label the confirmation accurately
+- [x] Remove the unused Resend credential test and provider path
+- [x] Verify contact form success/error states and WhatsApp handoff without external API credentials
+- [x] Sync the latest verified contact, WhatsApp, dashboard-banner, and helper-test changes to GitHub
+- [x] Commit and push the latest Liverton changes to the main branch

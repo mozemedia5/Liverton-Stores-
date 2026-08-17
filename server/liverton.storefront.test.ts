@@ -4,13 +4,14 @@ import { resolve } from "node:path";
 
 describe("Liverton storefront contract", () => {
   const app = readFileSync(resolve(process.cwd(), "client/src/App.tsx"), "utf8");
+  const contact = readFileSync(resolve(process.cwd(), "shared/contact.ts"), "utf8");
 
   it("uses Liverton branding throughout the application shell", () => {
     expect(app).toContain("Liverton");
   });
 
   it("includes the requested public routes", () => {
-    for (const route of ["/products", "/new-arrivals", "/about", "/innovation", "/solutions", "/support", "/shop", "/status", "/privacy", "/terms"]) {
+    for (const route of ["/products", "/new-arrivals", "/about", "/innovation", "/solutions", "/support", "/contact", "/shop", "/status", "/privacy", "/terms"]) {
       expect(app).toContain(`path=\"${route}\"`);
     }
   });
@@ -26,10 +27,14 @@ describe("Liverton storefront contract", () => {
     expect(app).toContain("InstallBanner");
   });
 
-  it("supports storefront interactions and brand layout contracts", () => {
+  it("supports storefront interactions, contact delivery, and banner slots", () => {
     expect(app).toContain("liverton-cart-updated");
     expect(app).toContain("translateY(${shift}px)");
     expect(app).toContain("remoteTitles");
+    expect(contact).toContain("livertoncodes@gmail.com");
+    expect(app).toContain("+256 705 954 597");
+    expect(app).toContain("dashboardBanners");
     expect(readFileSync(resolve(process.cwd(), "client/src/index.css"), "utf8")).toContain("grid-template-columns:1fr 1.8fr");
+    expect(readFileSync(resolve(process.cwd(), "client/src/index.css"), "utf8")).toContain(".contact-layout");
   });
 });

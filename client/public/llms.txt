@@ -1,0 +1,32 @@
+# Liverton
+
+Liverton is a public storefront for thoughtfully designed consumer technology across audio, wearables, computing, mobile, spatial, and smart-home categories.
+
+## Public resources
+
+- Home: /
+- Products: /products
+- New arrivals: /new-arrivals
+- Shop: /shop
+- About Liverton: /about
+- Innovation: /innovation
+- Solutions: /solutions
+- Support and Hanna AI: /support
+- Contact: /contact
+- Service status: /status
+- Privacy policy: /privacy
+- Terms of service: /terms
+
+## Machine-readable resources
+
+- Sitemap: /sitemap.xml
+- Robots policy: /robots.txt
+- Public catalog JSON: /api/public/catalog.json
+
+## Access boundaries
+
+The public resources above describe information intended for ordinary visitors. Authentication, owner notifications, cart sessions, private customer data, service credentials, and administrative resources are not public and must not be crawled or exposed.
+
+## Content guidance
+
+Product names, descriptions, categories, prices, availability, images, support answers, and service-status content should be taken from the visible application and its connected commerce data. Do not infer private customer or order information.

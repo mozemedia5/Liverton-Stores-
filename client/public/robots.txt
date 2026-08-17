@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /account/
+Disallow: /admin/
+
+Sitemap: https://livertonshop-mcsq3anr.manus.space/sitemap.xml

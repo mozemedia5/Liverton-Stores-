@@ -36,14 +36,45 @@
 - [x] Export the current Liverton storefront into the target GitHub repository
 - [x] Add Vercel-compatible project configuration and deployment documentation
 - [x] Verify build, repository structure, commit, and pushed remote branch
+
 - [x] Make every footer link route to a real in-app page instead of leaving users in the footer section
 - [x] Add a dedicated in-app Contact page with Email and WhatsApp options
 - [x] Add an email contact form addressed to livertoncodes@gmail.com without navigating away from the app
 - [x] Add an in-app WhatsApp message composer for +256705954597 with a clear handoff to WhatsApp delivery
 - [x] Add configurable home dashboard banner slots for videos, announcements, and promotional content
 - [x] Add tests for footer routes, contact form states, WhatsApp handoff, and dashboard banner rendering
+
 - [x] Use the built-in owner-notification channel for keyless contact submissions and label the confirmation accurately
 - [x] Remove the unused Resend credential test and provider path
 - [x] Verify contact form success/error states and WhatsApp handoff without external API credentials
+
 - [x] Sync the latest verified contact, WhatsApp, dashboard-banner, and helper-test changes to GitHub
 - [x] Commit and push the latest Liverton changes to the main branch
+
+- [x] Audit the existing Liverton routing, metadata, APIs, auth boundaries, build, and deployment configuration
+- [x] Add route-aware titles, descriptions, canonical URLs, robots directives, Open Graph tags, and JSON-LD structured data
+- [x] Add crawlable sitemap.xml, robots.txt, llms.txt, and public machine-readable resource endpoints without exposing private data
+- [x] Improve deep-link hosting fallback while preserving API and static asset routing
+- [x] Audit semantic HTML, accessibility, image alt text, loading/error/empty states, and public DOM discoverability
+- [x] Add tests for route metadata, structured data, crawlable resources, security boundaries, and deep links
+- [x] Run the full production build and all checks, then push the verified implementation to GitHub
+
+- [x] Add a dedicated read-only public catalog JSON endpoint backed by the real Shopify catalog data
+- [x] Add contract coverage for the public catalog JSON endpoint and its non-sensitive fields
+- [x] Add concrete landmark, heading, button/link, image-alt, and route state improvements
+- [x] Add tests for the accessibility and loading/empty/error-state contracts
+- [x] Push the verified discoverability changes to GitHub after rerunning all checks
+
+- [x] Exercise the public catalog endpoint or response builder and assert safe JSON fields with no private data
+- [x] Add meaningful rendered UI tests for Products loading/error/empty states, navigation labels, live regions, filter state, and not-found behavior
+
+- [x] Add actual DOM-rendering tests for Products states, navigation labels, live regions, filter aria-pressed, and not-found behavior
+
+- [x] Add a DOM-rendered test for the actual Products page state renderer
+- [x] Add a DOM-rendered test for navigation landmark labels
+- [x] Add a DOM-rendered test for the NotFound page visible content and recovery action
+
+- [x] Extract the Products-page renderer used by the real ProductsPage and test its integrated DOM states
+
+- [x] Add a DOM test for ProductsPageView error state and alert output
+- [x] Add a DOM test for ProductsPageView ready state with a rendered product

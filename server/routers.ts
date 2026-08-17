@@ -1,15 +1,32 @@
 import { COOKIE_NAME } from "@shared/const";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
+import { notifyOwner } from "./_core/notification";
 import { publicProcedure, router } from "./_core/trpc";
 import { invokeLLM } from "./_core/llm";
 import { z } from "zod";
 import { commerceRouter } from "./routers/commerce";
+import { CONTACT_EMAIL, buildOwnerContactContent } from "@shared/contact";
 
 export const appRouter = router({
     // if you need to use socket.io, read and register route in server/_core/index.ts, all api should start with '/api/' so that the gateway can route correctly
   system: systemRouter,
   commerce: commerceRouter,
+  contact: publicProcedure
+    .input(z.object({
+      name: z.string().trim().min(2).max(120),
+      email: z.string().email().max(320),
+      subject: z.string().trim().min(2).max(180),
+      message: z.string().trim().min(10).max(5000),
+      channel: z.enum(["email", "whatsapp"]),
+    }))
+    .mutation(async ({ input }) => {
+      const delivered = await notifyOwner({
+        title: `Liverton contact: ${input.subject}`,
+        content: buildOwnerContactContent(input, input.channel),
+      });
+      return { delivered, destination: input.channel === "email" ? CONTACT_EMAIL : "+256705954597" };
+    }),
   hanna: router({
     chat: publicProcedure
       .input(z.object({ messages: z.array(z.object({ role: z.enum(["user", "assistant", "system"]), content: z.string() })).min(1).max(30) }))

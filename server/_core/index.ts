@@ -8,6 +8,8 @@ import { registerStorageProxy } from "./storageProxy";
 import { appRouter } from "../routers";
 import { createContext } from "./context";
 import { serveStatic, setupVite } from "./vite";
+import { listProducts } from "./shopify";
+import { buildPublicCatalogResponse } from "../publicCatalog";
 
 function isPortAvailable(port: number): Promise<boolean> {
   return new Promise(resolve => {
@@ -36,6 +38,15 @@ async function startServer() {
   app.use(express.urlencoded({ limit: "50mb", extended: true }));
   registerStorageProxy(app);
   registerOAuthRoutes(app);
+  app.get("/api/public/catalog.json", async (_req, res) => {
+    try {
+      const products = await listProducts({ first: 100 });
+      res.json(buildPublicCatalogResponse(products));
+    } catch (error) {
+      console.error("[Public catalog] Failed to load:", error);
+      res.status(503).json({ error: "Public catalog temporarily unavailable" });
+    }
+  });
   // tRPC API
   app.use(
     "/api/trpc",

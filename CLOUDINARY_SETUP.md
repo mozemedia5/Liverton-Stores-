@@ -4,7 +4,7 @@ Liverton now uses Cloudinary for image and video storage. The protected `/admin/
 
 ## Vercel variables
 
-Add these variables to both Vercel Preview and Production. The `CLOUDINARY_*` values are server-only. Only the cloud name and public IDs use the `VITE_` prefix because they are delivery configuration, not secrets.
+Add the server-only variables below to both the storefront and Admin-Store deployments when each deployment hosts the shared backend. Homepage banner media, copy, and publication state are not Vercel variables; they are managed in Admin-Store and stored in the shared `storefront_banners` table.
 
 | Variable | Required | Purpose |
 |---|---:|---|
@@ -12,11 +12,7 @@ Add these variables to both Vercel Preview and Production. The `CLOUDINARY_*` va
 | `CLOUDINARY_API_KEY` | Yes | Server-side Cloudinary API key |
 | `CLOUDINARY_API_SECRET` | Yes | Server-side Cloudinary API secret |
 | `CLOUDINARY_UPLOAD_PRESET` | Yes | Signed preset used by `/admin/media` |
-| `VITE_CLOUDINARY_CLOUD_NAME` | Yes for browser delivery | Public cloud name used to construct delivery URLs |
-| `VITE_CLOUDINARY_BANNER_VIDEO_PUBLIC_ID` | Optional | Cloudinary public ID for the home video banner |
-| `VITE_CLOUDINARY_BANNER_POSTER_PUBLIC_ID` | Optional | Cloudinary public ID for the home banner poster image |
-
-Use the same cloud name for `CLOUDINARY_CLOUD_NAME` and `VITE_CLOUDINARY_CLOUD_NAME`.
+The customer storefront does not need any `VITE_CLOUDINARY_*` banner variables. Media URLs and public IDs are returned by the shared backend after Admin-Store publishes content.
 
 ## Presets to create
 
@@ -27,10 +23,10 @@ Create the following preset in Cloudinary Console → Settings → Upload → Up
 | `liverton_admin_media` | **Signed** | `liverton/media` | Image, video, and raw only if needed | Limit file size, disable overwrite, use automatic format/quality delivery, and restrict allowed formats to `jpg,jpeg,png,webp,gif,mp4,webm,mov` |
 | `liverton_public_media` | **Unsigned** | `liverton/public` | Image only | Optional future preset for explicitly public customer submissions; do not use it for admin catalog or campaign media |
 
-Set `CLOUDINARY_UPLOAD_PRESET=liverton_admin_media` in Vercel. The current app uses the signed preset. The unsigned preset is only a future option and is not used by the storefront.
+Set `CLOUDINARY_UPLOAD_PRESET=liverton_admin_media` in Admin-Store and any shared server deployment. The current app uses the signed preset. The unsigned preset is only a future option and is not used for admin catalog or campaign media.
 
 ## Admin workflow
 
-Open `/admin/media` while signed in with a user whose Manus role is `admin`. Choose Image or Video, select a file, and upload it. Cloudinary returns a secure delivery URL and public ID. For homepage banner delivery, store the returned public ID in `VITE_CLOUDINARY_BANNER_VIDEO_PUBLIC_ID` or `VITE_CLOUDINARY_BANNER_POSTER_PUBLIC_ID`, then redeploy Vercel. This avoids pasting full media URLs into the application.
+Open `/admin/media` in Admin-Store while signed in with a user whose Manus role is `admin`. Choose Image or Video, select a file, and upload it. Then create and publish a banner in the Admin-Store Banner Manager. The shared backend stores the media URL, poster URL, Cloudinary public ID, copy, position, and publication state. The customer storefront reads only published records and does not require a redeploy when campaign content changes.
 
 Do not place `CLOUDINARY_API_SECRET`, Shopify Admin secrets, or any real credential in GitHub, source files, browser code, or chat. Rotate any credential that has previously been exposed before adding the replacement to Vercel.

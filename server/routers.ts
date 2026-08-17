@@ -8,12 +8,14 @@ import { z } from "zod";
 import { commerceRouter } from "./routers/commerce";
 import { CONTACT_EMAIL, buildOwnerContactContent } from "@shared/contact";
 import { cloudinaryRouter } from "./routers/cloudinary";
+import { storefrontContentRouter } from "./routers/storefrontContent";
 
 export const appRouter = router({
     // if you need to use socket.io, read and register route in server/_core/index.ts, all api should start with '/api/' so that the gateway can route correctly
   system: systemRouter,
   commerce: commerceRouter,
   cloudinary: cloudinaryRouter,
+  storefrontContent: storefrontContentRouter,
   contact: publicProcedure
     .input(z.object({
       name: z.string().trim().min(2).max(120),

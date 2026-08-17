@@ -25,4 +25,27 @@ export const users = mysqlTable("users", {
 export type User = typeof users.$inferSelect;
 export type InsertUser = typeof users.$inferInsert;
 
-// TODO: Add your tables here
+export const storefrontBanners = mysqlTable("storefront_banners", {
+  id: int("id").autoincrement().primaryKey(),
+  slug: varchar("slug", { length: 160 }).notNull().unique(),
+  kind: mysqlEnum("kind", ["image", "video", "announcement"]).default("image").notNull(),
+  title: varchar("title", { length: 180 }).notNull(),
+  body: text("body"),
+  actionLabel: varchar("actionLabel", { length: 80 }),
+  href: varchar("href", { length: 500 }),
+  mediaUrl: text("mediaUrl"),
+  posterUrl: text("posterUrl"),
+  cloudinaryPublicId: varchar("cloudinaryPublicId", { length: 500 }),
+  status: mysqlEnum("status", ["draft", "published", "archived"]).default("draft").notNull(),
+  position: int("position").default(0).notNull(),
+  startsAt: timestamp("startsAt"),
+  endsAt: timestamp("endsAt"),
+  createdBy: varchar("createdBy", { length: 64 }),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type StorefrontBanner = typeof storefrontBanners.$inferSelect;
+export type InsertStorefrontBanner = typeof storefrontBanners.$inferInsert;
+
+// TODO: Add more tables here as the shared control plane grows

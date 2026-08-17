@@ -123,7 +123,16 @@
 - [x] Verify the cleaned Home page at desktop and mobile breakpoints and rerun tests
 - [x] Save and publish the homepage cleanup checkpoint
 
-- [ ] Push the homepage banner removal together with all Cloudinary and Shopify environment changes to GitHub and verify origin/main
+- [x] Push the homepage banner removal together with all Cloudinary and Shopify environment changes to GitHub and verify origin/main
 
 - [x] Take a fresh mobile screenshot of the cleaned Home page and confirm the announcement strip and hero remain usable
-- [ ] Save and auto-publish a new checkpoint containing the Home cleanup, then verify the published version
+- [x] Save and auto-publish a new checkpoint containing the Home cleanup, then verify the published version
+
+- [ ] Remove homepage banner URL/public-ID configuration from Vercel as the source of truth
+- [ ] Add shared backend content contracts for published storefront banners and media metadata
+- [ ] Make the storefront read published banner content from the shared backend with safe empty states
+- [ ] Create a separate GitHub repository named Admin-Store without exposing it through the public storefront navigation
+- [ ] Build a responsive Admin-Store dashboard using the Liverton visual language and protected admin authorization
+- [ ] Add Admin-Store banner/media management groundwork connected to the shared backend and Cloudinary signing flow
+- [ ] Reuse the same Shopify, Firebase/auth, database, and Cloudinary environment variable names without committing values
+- [ ] Add tests, deployment documentation, responsive verification, and push both repositories

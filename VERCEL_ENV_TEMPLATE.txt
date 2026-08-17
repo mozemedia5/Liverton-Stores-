@@ -41,13 +41,6 @@ VITE_FIREBASE_STORAGE_BUCKET=
 VITE_FIREBASE_MESSAGING_SENDER_ID=
 VITE_FIREBASE_APP_ID=
 
-Cloudinary public delivery configuration
-VITE_CLOUDINARY_CLOUD_NAME=
-VITE_CLOUDINARY_BANNER_VIDEO_PUBLIC_ID=
-VITE_CLOUDINARY_BANNER_POSTER_PUBLIC_ID=
-
-Optional dashboard banner copy overrides
-VITE_LIVERTON_BANNER_TITLE=
-VITE_LIVERTON_BANNER_BODY=
+Cloudinary browser delivery configuration is not required by the customer storefront. Published banner media and copy are managed in Admin-Store and read from the shared backend.
 
 Never use VITE_ for Shopify Admin tokens, client IDs, secrets, or Cloudinary secrets. The Cloudinary API secret stays server-only; the admin upload page receives only short-lived signatures. Rotate any exposed credentials before entering fresh values in Vercel.

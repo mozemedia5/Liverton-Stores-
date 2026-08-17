@@ -1,0 +1,21 @@
+CREATE TABLE `storefront_banners` (
+	`id` int AUTO_INCREMENT NOT NULL,
+	`slug` varchar(160) NOT NULL,
+	`kind` enum('image','video','announcement') NOT NULL DEFAULT 'image',
+	`title` varchar(180) NOT NULL,
+	`body` text,
+	`actionLabel` varchar(80),
+	`href` varchar(500),
+	`mediaUrl` text,
+	`posterUrl` text,
+	`cloudinaryPublicId` varchar(500),
+	`status` enum('draft','published','archived') NOT NULL DEFAULT 'draft',
+	`position` int NOT NULL DEFAULT 0,
+	`startsAt` timestamp,
+	`endsAt` timestamp,
+	`createdBy` varchar(64),
+	`createdAt` timestamp NOT NULL DEFAULT (now()),
+	`updatedAt` timestamp NOT NULL DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,
+	CONSTRAINT `storefront_banners_id` PRIMARY KEY(`id`),
+	CONSTRAINT `storefront_banners_slug_unique` UNIQUE(`slug`)
+);

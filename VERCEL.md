@@ -10,15 +10,7 @@ Import the repository with the repository root as the Vercel project root. Keep 
 
 The managed project intentionally does not create or commit `.env.example`; `VERCEL_ENV_TEMPLATE.txt` is the official names-only substitute. Add the variables listed there to the Vercel project for both Preview and Production. The existing Liverton WebDev values remain required for auth, database, Forge, and Shopify storefront operation.
 
-The Firebase values are web configuration and may use the `VITE_` prefix because they are intentionally available to the browser. Homepage media is stored in Cloudinary; only the cloud name and public IDs are client-readable:
-
-| Variable | Purpose |
-|---|---|
-| `VITE_CLOUDINARY_CLOUD_NAME` | Public Cloudinary cloud name |
-| `VITE_CLOUDINARY_BANNER_VIDEO_PUBLIC_ID` | Optional Cloudinary public ID for the home video banner |
-| `VITE_CLOUDINARY_BANNER_POSTER_PUBLIC_ID` | Optional Cloudinary public ID for the banner poster image |
-| `VITE_LIVERTON_BANNER_TITLE` | Optional banner title override |
-| `VITE_LIVERTON_BANNER_BODY` | Optional banner copy override |
+The Firebase values are web configuration and may use the `VITE_` prefix because they are intentionally available to the browser. Homepage banner media and copy are not configured in Vercel. They are created, uploaded, drafted, and published in the separate Admin-Store application, then read by this storefront from the shared backend.
 
 Shopify Admin variables must remain server-only. Never prefix them with `VITE_`:
 
@@ -41,7 +33,7 @@ Shopify Admin variables must remain server-only. Never prefix them with `VITE_`:
 | `CLOUDINARY_API_SECRET` | Cloudinary server-side API secret; never expose to the browser |
 | `CLOUDINARY_UPLOAD_PRESET` | Signed upload preset used by the protected admin media page |
 
-The protected media route is `/admin/media`. It requests a short-lived signature from the server and uploads directly to Cloudinary; the browser never receives the Cloudinary API secret.
+The protected media route is `/admin/media` in Admin-Store. It requests a short-lived signature from the shared server-side Cloudinary integration and uploads directly to Cloudinary; the browser never receives the Cloudinary API secret. Banner records are stored in the shared `storefront_banners` table and the public storefront renders only records with `published` status.
 
 ## Credential safety
 

@@ -33,8 +33,8 @@ describe("Liverton storefront contract", () => {
     expect(app).toContain("remoteTitles");
     expect(contact).toContain("livertoncodes@gmail.com");
     expect(app).toContain("+256 705 954 597");
-    expect(app).not.toContain("dashboardBanners");
-    expect((app.match(/className=\"dashboard-banners\"/g) ?? []).length).toBe(0);
+    expect(app).toContain("publishedBanners");
+    expect((app.match(/className=\"dashboard-banners\"/g) ?? []).length).toBe(1);
     expect(app).toContain('className="announcement"');
     expect(app).not.toContain('className="dashboard"');
     expect(readFileSync(resolve(process.cwd(), "VERCEL_ENV_TEMPLATE.txt"), "utf8")).toContain("VITE_FIREBASE_API_KEY=");

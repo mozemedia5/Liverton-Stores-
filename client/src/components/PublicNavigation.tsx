@@ -8,8 +8,17 @@ export const PUBLIC_NAV_LINKS = [
   ["/new-arrivals", "New Arrivals"],
   ["/innovation", "Innovation"],
   ["/support", "Support"],
+  ["/about", "About"],
+  ["/solutions", "Solutions"],
+  ["/contact", "Contact"],
+  ["/status", "Status"],
   ["/shop", "Shop"],
 ] as const;
+
+function navigateToTop(onNavigate?: () => void) {
+  onNavigate?.();
+  window.requestAnimationFrame(() => window.scrollTo({ top: 0, behavior: "smooth" }));
+}
 
 export function PublicNavigationMarkup({ mobile = false, location = "/", onNavigate }: { mobile?: boolean; location?: string; onNavigate?: () => void }) {
   return (
@@ -17,16 +26,16 @@ export function PublicNavigationMarkup({ mobile = false, location = "/", onNavig
       {PUBLIC_NAV_LINKS.map(([href, label]) => {
         const active = href === "/" ? location === "/" : location.startsWith(href);
         return (
-          <a
+          <Link
             key={href}
             href={href}
             className={mobile ? undefined : active ? "nav-link active" : "nav-link"}
             aria-current={active ? "page" : undefined}
-            onClick={onNavigate}
+            onClick={() => navigateToTop(onNavigate)}
           >
             {label}
             {mobile && <ArrowRight size={16} />}
-          </a>
+          </Link>
         );
       })}
     </nav>

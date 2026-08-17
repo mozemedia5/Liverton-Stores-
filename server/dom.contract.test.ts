@@ -3,6 +3,7 @@ import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { CatalogFilterControls, CatalogStateFeedback } from "../client/src/components/CatalogA11y";
 import { PublicNavigationMarkup } from "../client/src/components/PublicNavigation";
+import { Router } from "wouter";
 import { ProductsPageView } from "../client/src/components/ProductsPageView";
 import NotFound from "../client/src/pages/NotFound";
 import { getSeoConfig } from "../client/src/lib/seo";
@@ -88,7 +89,7 @@ describe("Liverton DOM accessibility contracts", () => {
   });
 
   it("renders the production navigation landmark labels and active page state", () => {
-    const html = renderToStaticMarkup(createElement(PublicNavigationMarkup, { location: "/products" }));
+    const html = renderToStaticMarkup(createElement(Router, { hook: () => ["/products", noop] as const }, createElement(PublicNavigationMarkup, { location: "/products" })));
     expect(html).toContain('<nav class="desktop-nav" aria-label="Primary navigation">');
     expect(html).toContain('aria-current="page"');
     expect(html).toContain("New Arrivals");

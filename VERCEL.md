@@ -1,17 +1,49 @@
 # Liverton on Vercel
 
-This repository contains the Liverton React/Vite storefront and its serverless API entrypoint. Vercel builds the Vite client into `dist/public` and routes `/api/*` requests to `api/index.ts`, which exposes the tRPC, Shopify commerce, OAuth, storage, and Hanna AI procedures.
+This repository contains the Liverton React/Vite storefront and its serverless API entrypoint. Vercel builds the Vite client into `dist/public` and routes `/api/*` requests to `api/index.ts`, which exposes the tRPC, Shopify commerce, OAuth, storage, public catalog, and Hanna AI procedures.
 
-## Vercel project settings
+## Project settings
 
-The checked-in `vercel.json` defines the build command, pnpm install command, Vite output directory, and SPA/API rewrites. Import the repository into Vercel with the repository root as the project root and leave the framework detected as Vite.
+Import the repository with the repository root as the Vercel project root. Keep the framework set to Vite or allow Vercel to detect it. The checked-in `vercel.json` defines the install, build, output, API, and SPA routing contract.
 
-## Required environment variables
+## Environment variables
 
-Add the values from the Liverton WebDev project to the Vercel project environment settings for Preview and Production. The runtime requires `DATABASE_URL`, `JWT_SECRET`, `VITE_APP_ID`, `OAUTH_SERVER_URL`, `VITE_OAUTH_PORTAL_URL`, `OWNER_OPEN_ID`, `OWNER_NAME`, `BUILT_IN_FORGE_API_URL`, `BUILT_IN_FORGE_API_KEY`, `VITE_FRONTEND_FORGE_API_URL`, `VITE_FRONTEND_FORGE_API_KEY`, `SHOPIFY_STORE_DOMAIN`, and `SHOPIFY_STOREFRONT_API_ACCESS_TOKEN`. Add `VITE_ANALYTICS_ENDPOINT` and `VITE_ANALYTICS_WEBSITE_ID` only if analytics is enabled.
+The managed project intentionally does not create or commit `.env.example`; `VERCEL_ENV_TEMPLATE.txt` is the official names-only substitute. Add the variables listed there to the Vercel project for both Preview and Production. The existing Liverton WebDev values remain required for auth, database, Forge, and Shopify storefront operation.
 
-Never commit `.env` files or storefront/admin secrets. Shopify Admin operations remain outside the deployed browser bundle; the serverless API uses only the Storefront token at runtime.
+The Firebase values are web configuration and may use the `VITE_` prefix because they are intentionally available to the browser. The optional dashboard banner variables are also client-readable and control the home banner without a code change:
 
-## Local verification
+| Variable | Purpose |
+|---|---|
+| `VITE_LIVERTON_BANNER_VIDEO_URL` | Optional video source for the video-ready dashboard banner |
+| `VITE_LIVERTON_BANNER_POSTER_URL` | Optional poster image for the video banner |
+| `VITE_LIVERTON_BANNER_TITLE` | Optional banner title override |
+| `VITE_LIVERTON_BANNER_BODY` | Optional banner copy override |
 
-Run `pnpm install --frozen-lockfile`, `pnpm check`, `pnpm test`, and `pnpm build` before connecting the repository to Vercel. The app is also hosted and previewable through Manus WebDev; Vercel is an external deployment target and may require platform-specific environment, serverless timeout, and database configuration adjustments.
+Shopify Admin variables must remain server-only. Never prefix them with `VITE_`:
+
+| Variable | Purpose |
+|---|---|
+| `SHOPIFY_STORE_DOMAIN` | Storefront domain, such as `your-store.myshopify.com` |
+| `SHOPIFY_STOREFRONT_API_ACCESS_TOKEN` | Storefront API access token used by the server-side commerce procedures |
+| `SHOPIFY_ADMIN_ACCESS_TOKEN` | Rotated Admin API token for future server-only Admin operations |
+| `SHOPIFY_CLIENT_ID` | Shopify app client ID for server-side app operations |
+| `SHOPIFY_API_SECRET` | Shopify app secret; server-only |
+
+## Credential safety
+
+Do not commit `.env`, `.env.local`, or any file containing real values. The repository contains variable names only. Any Shopify Admin token or app secret pasted into chat or another public location must be revoked and regenerated before use. The browser must never receive Shopify Admin credentials.
+
+## Verification
+
+Before connecting the repository to Vercel, run:
+
+```bash
+pnpm install --frozen-lockfile
+pnpm check
+pnpm test
+pnpm build
+```
+
+After the first Vercel Preview deployment, verify the home page, direct deep links, Shopify product loading, cart/checkout handoff, Hanna AI, contact form, PWA install prompt, and `/api/public/catalog.json`. Then promote the verified Preview to Production.
+
+The managed Manus deployment remains available at `https://livertonshop-mcsq3anr.manus.space`; Vercel is an external deployment target and may require platform-specific environment, serverless timeout, and database configuration adjustments.

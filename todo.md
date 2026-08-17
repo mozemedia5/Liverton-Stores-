@@ -78,3 +78,33 @@
 
 - [x] Add a DOM test for ProductsPageView error state and alert output
 - [x] Add a DOM test for ProductsPageView ready state with a rendered product
+
+- [ ] Rotate the Shopify Admin/API credentials that were pasted into chat and keep all replacement values out of source control
+- [x] Define safe Vercel environment-variable names for Firebase public config, Shopify Storefront access, Shopify Admin server access, and dashboard media
+- [x] Add names-only deployment variable documentation using VERCEL_ENV_TEMPLATE.txt and VERCEL.md; do not commit .env files
+- [x] Replace supported Firebase, Shopify Storefront, Admin-name, and banner configuration surfaces with environment-backed runtime configuration; document intentional UI fallbacks
+- [x] Fix footer links so every destination is a real route and every navigation change scrolls to the top
+- [x] Mirror footer destinations in the primary navigation/sidebar where appropriate
+- [x] Verify desktop, laptop, tablet, and mobile responsive behavior after the routing changes
+- [x] Verify dashboard banners use the intended configurable slots and remove misplaced banner UI
+- [x] Run all checks and production build, then push the verified update to GitHub
+
+- [ ] Revoke and rotate the Shopify Admin token and app secret that were pasted into chat before enabling server-side Admin operations
+- [x] Do not commit, hardcode, or reuse any pasted credential values; use Vercel environment variables only
+
+- [x] Add environment-variable names only for Firebase, Shopify Admin/server settings, and dashboard banner overrides
+- [x] Add or update .env.example and Vercel deployment documentation without any credential values
+- [x] Make footer and primary-navigation destinations route to real pages and scroll to the top after navigation
+- [x] Ensure footer destinations are represented in the main navigation/sidebar where appropriate
+- [x] Verify and polish mobile, tablet, laptop, and desktop responsive layouts
+- [x] Move dashboard banner content into the intended configurable banner slots and remove misplaced banner UI
+- [x] Run all checks and a successful production build
+- [ ] Push the verified implementation to GitHub and verify origin/main
+
+- [x] Document VERCEL_ENV_TEMPLATE.txt as the official substitute for the blocked .env.example file
+- [x] Freshly verify updated navigation, footer, and banner layouts at mobile, tablet, laptop, and desktop breakpoints
+- [x] Confirm the home page has one intentional configurable banner area and remove any duplicate or misplaced banner presentation
+- [x] Add a banner-placement contract test and responsive verification note before the final push
+
+- [x] Document the top announcement as intentionally separate from the configurable dashboard banner area
+- [x] Add a persistent responsive verification note covering mobile, tablet, laptop, and desktop screenshots

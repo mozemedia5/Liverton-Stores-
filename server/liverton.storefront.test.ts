@@ -34,6 +34,10 @@ describe("Liverton storefront contract", () => {
     expect(contact).toContain("livertoncodes@gmail.com");
     expect(app).toContain("+256 705 954 597");
     expect(app).toContain("dashboardBanners");
+    expect((app.match(/className=\"dashboard-banners\"/g) ?? []).length).toBe(1);
+    expect(app).not.toContain('className="dashboard"');
+    expect(readFileSync(resolve(process.cwd(), "VERCEL_ENV_TEMPLATE.txt"), "utf8")).toContain("VITE_FIREBASE_API_KEY=");
+    expect(readFileSync(resolve(process.cwd(), "VERCEL_ENV_TEMPLATE.txt"), "utf8")).not.toContain("shpat_");
     expect(readFileSync(resolve(process.cwd(), "client/src/index.css"), "utf8")).toContain("grid-template-columns:1fr 1.8fr");
     expect(readFileSync(resolve(process.cwd(), "client/src/index.css"), "utf8")).toContain(".contact-layout");
   });

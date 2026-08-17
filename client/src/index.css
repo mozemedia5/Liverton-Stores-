@@ -22,3 +22,9 @@
 }
 .empty-state h3 { color: #1b1830; margin: 0; }
 .empty-state p { margin: 0; }
+
+/* Liverton responsive navigation and banner safeguards */
+@media (max-width:1200px){.navbar{padding-left:5.5rem;padding-right:2rem}.desktop-nav{gap:16px}.nav-link{font-size:13px}.side-rail{left:12px}.hero,.dashboard,.section,.quote,.page-wrap{padding-left:6.5rem}}
+@media (max-width:1050px){.navbar{padding-left:2rem}.desktop-nav{gap:12px}.side-rail{display:none}.hero,.dashboard,.section,.quote,.page-wrap,.footer{padding-left:2rem;padding-right:2rem}.footer-grid{grid-template-columns:1fr}.footer-newsletter{grid-column:auto}.footer-links{grid-template-columns:repeat(3,1fr)}}
+@media (max-width:760px){.navbar{height:74px;padding:0 18px}.app-content{padding-top:74px}.desktop-nav{display:none}.menu-button{display:grid}.hero{grid-template-columns:1fr;min-height:auto;padding-top:4rem}.hero-copy h1{letter-spacing:-3px}.hero-media{min-height:420px}.dashboard,.category-grid,.product-grid,.product-grid.compact,.feature-grid{grid-template-columns:1fr 1fr}.support-layout,.arrival-banner,.editorial-hero{grid-template-columns:1fr}.footer-links{grid-template-columns:repeat(2,1fr)}.footer-newsletter{margin-top:4px}}
+@media (max-width:520px){.hero,.dashboard,.section,.quote,.page-wrap,.footer{padding-left:18px;padding-right:18px}.dashboard,.category-grid,.product-grid,.product-grid.compact,.feature-grid{grid-template-columns:1fr}.hero-copy h1{font-size:3.2rem}.hero-buttons,.proof{flex-wrap:wrap}.proof{gap:15px;margin-top:32px}.hero-media{min-height:330px}.video-card{border-radius:24px}.floating-spec{left:8px;bottom:20px}.footer-links{grid-template-columns:1fr 1fr;gap:18px}.footer-newsletter form{flex-direction:column}.install-banner{bottom:86px}.hanna-fab{right:16px;bottom:20px}.hanna-popover{right:16px;bottom:75px}}

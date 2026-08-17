@@ -142,3 +142,7 @@
 
 - [x] Clarify Firebase-provided configuration versus Manus/shared-backend variables in both deployment guides and templates
 - [x] Synchronize the clarified variable documentation and verify both repositories
+
+- [x] Replace Manus OAuth/backend infrastructure with Firebase Auth/Firestore-backed application flows while retaining Shopify and Cloudinary
+- [x] Remove Manus route registration and align Firebase-Shopify-Cloudinary Vercel variables
+- [x] Run storefront checks, tests, and production build after the migration

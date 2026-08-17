@@ -1,6 +1,6 @@
 # Liverton on Vercel
 
-This repository contains the Liverton React/Vite storefront and its serverless API entrypoint. Vercel builds the Vite client into `dist/public` and routes `/api/*` requests to `api/index.ts`, which exposes the tRPC, Shopify commerce, OAuth, storage, public catalog, and Hanna AI procedures.
+This repository contains the Liverton React/Vite storefront and its serverless API entrypoint. Vercel builds the Vite client into `dist/public` and routes `/api/*` requests to `api/index.ts`, which exposes the tRPC, Firebase-backed application data, Shopify commerce, Cloudinary integration, public catalog, contact, and Hanna support procedures.
 
 ## Project settings
 
@@ -8,7 +8,7 @@ Import the repository with the repository root as the Vercel project root. Keep 
 
 ## Environment variables
 
-The managed project intentionally does not create or commit `.env.example`; `VERCEL_ENV_TEMPLATE.txt` is the official contract. Add the required variables to both Preview and Production. The storefront and Admin-Store share `DATABASE_URL`, `JWT_SECRET`, `VITE_APP_ID`, `OAUTH_SERVER_URL`, `VITE_OAUTH_PORTAL_URL`, `OWNER_OPEN_ID`, `SHOPIFY_STORE_DOMAIN`, `SHOPIFY_STOREFRONT_API_ACCESS_TOKEN`, and `VITE_FIREBASE_CONFIG_JSON`. Firebase provides only the browser configuration inside `VITE_FIREBASE_CONFIG_JSON`; it does **not** provide the other six backend/auth variables. Those values must be copied from the existing Liverton/Manus project configuration. Do not invent them or replace them with Firebase values. Homepage banner media and copy are not configured in Vercel. They are created, uploaded, drafted, and published in Admin-Store, then read from the shared backend.
+The managed project intentionally does not create or commit `.env.example`; `VERCEL_ENV_TEMPLATE.txt` is the official contract. Add the required variables to both Preview and Production. The Firebase web configuration belongs in `VITE_FIREBASE_CONFIG_JSON`; the Firebase service-account JSON belongs in the server-only `FIREBASE_SERVICE_ACCOUNT_JSON`. Shopify uses `SHOPIFY_STORE_DOMAIN` and `SHOPIFY_STOREFRONT_API_ACCESS_TOKEN`. Homepage banner media and copy are created, uploaded, drafted, and published in Admin-Store through Firebase and Cloudinary, then read by the storefront.
 
 In Firebase Console, use **Project settings → Your apps → Web app configuration**. Put the Firebase fields `apiKey`, `authDomain`, `databaseURL` (if enabled), `projectId`, `storageBucket`, `messagingSenderId`, and `appId` together as the one JSON value for `VITE_FIREBASE_CONFIG_JSON`. Firebase web configuration is browser-safe; never put a Firebase service-account private key in it. Cloudinary variables belong in Admin-Store only: `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET`, and `CLOUDINARY_UPLOAD_PRESET=liverton_admin_media`. Shopify Admin variables are optional future server-only settings and are not required for the current storefront. Never prefix Shopify Admin or Cloudinary secrets with `VITE_`.
 
@@ -29,4 +29,4 @@ pnpm build
 
 After the first Vercel Preview deployment, verify the home page, direct deep links, Shopify product loading, cart/checkout handoff, Hanna AI, contact form, PWA install prompt, and `/api/public/catalog.json`. Then promote the verified Preview to Production.
 
-The managed Manus deployment remains available at `https://livertonshop-mcsq3anr.manus.space`; Vercel is an external deployment target and may require platform-specific environment, serverless timeout, and database configuration adjustments.
+The production deployment uses Vercel with Firebase as the application backend, Shopify as the commerce source of truth, and Cloudinary as the media store.

@@ -12,10 +12,10 @@ afterEach(() => {
 describe("Cloudinary and Shopify environment contracts", () => {
   it("documents Cloudinary names without real values", () => {
     const template = readFileSync(resolve(process.cwd(), "VERCEL_ENV_TEMPLATE.txt"), "utf8");
-    expect(template).toContain("CLOUDINARY_CLOUD_NAME=");
-    expect(template).toContain("CLOUDINARY_API_KEY=");
-    expect(template).toContain("CLOUDINARY_API_SECRET=");
-    expect(template).toContain("CLOUDINARY_UPLOAD_PRESET=");
+    expect(template).not.toContain("CLOUDINARY_CLOUD_NAME=");
+    expect(template).not.toContain("CLOUDINARY_API_KEY=");
+    expect(template).not.toContain("CLOUDINARY_API_SECRET=");
+    expect(template).not.toContain("CLOUDINARY_UPLOAD_PRESET=");
     expect(template).toContain("Banner media and copy are managed in Admin-Store");
     expect(template).not.toContain("VITE_CLOUDINARY_CLOUD_NAME=");
     expect(template).not.toContain("VITE_CLOUDINARY_BANNER_VIDEO_PUBLIC_ID=");

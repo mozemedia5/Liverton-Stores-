@@ -1,6 +1,6 @@
 import type { CreateExpressContextOptions } from "@trpc/server/adapters/express";
 import type { User } from "../../drizzle/schema";
-import { sdk } from "./sdk";
+import { getFirebaseAdmin } from "../firebaseAdmin";
 
 export type TrpcContext = {
   req: CreateExpressContextOptions["req"];
@@ -8,21 +8,62 @@ export type TrpcContext = {
   user: User | null;
 };
 
-export async function createContext(
-  opts: CreateExpressContextOptions
-): Promise<TrpcContext> {
-  let user: User | null = null;
+function asDate(value: unknown, fallback = new Date()) {
+  if (value && typeof value === "object" && "toDate" in value && typeof value.toDate === "function") return value.toDate() as Date;
+  if (value instanceof Date) return value;
+  return fallback;
+}
+
+async function authenticateFirebaseRequest(req: CreateExpressContextOptions["req"]): Promise<User | null> {
+  const header = req.headers.authorization;
+  if (!header?.startsWith("Bearer ")) return null;
+  const idToken = header.slice("Bearer ".length).trim();
+  if (!idToken) return null;
 
   try {
-    user = await sdk.authenticateRequest(opts.req);
-  } catch (error) {
-    // Authentication is optional for public procedures.
-    user = null;
-  }
+    const { auth, firestore } = getFirebaseAdmin();
+    const decoded = await auth.verifyIdToken(idToken);
+    const profileRef = firestore.collection("users").doc(decoded.uid);
+    const profileSnapshot = await profileRef.get();
+    const profile = profileSnapshot.exists ? profileSnapshot.data() ?? {} : {};
+    const role = decoded.admin === true || profile.role === "admin" ? "admin" : "user";
+    const now = new Date();
 
+    if (!profileSnapshot.exists) {
+      await profileRef.set({
+        uid: decoded.uid,
+        name: decoded.name ?? null,
+        email: decoded.email ?? null,
+        role,
+        loginMethod: decoded.firebase?.sign_in_provider ?? "firebase",
+        createdAt: now,
+        updatedAt: now,
+        lastSignedIn: now,
+      });
+    } else {
+      await profileRef.set({ lastSignedIn: now, updatedAt: now }, { merge: true });
+    }
+
+    return {
+      id: 0,
+      openId: decoded.uid,
+      name: (profile.name as string | null | undefined) ?? decoded.name ?? null,
+      email: (profile.email as string | null | undefined) ?? decoded.email ?? null,
+      loginMethod: (profile.loginMethod as string | undefined) ?? decoded.firebase?.sign_in_provider ?? "firebase",
+      role,
+      createdAt: asDate(profile.createdAt, now),
+      updatedAt: asDate(profile.updatedAt, now),
+      lastSignedIn: now,
+    } as User;
+  } catch {
+    return null;
+  }
+}
+
+export async function createContext(opts: CreateExpressContextOptions): Promise<TrpcContext> {
   return {
     req: opts.req,
     res: opts.res,
-    user,
+    user: await authenticateFirebaseRequest(opts.req),
   };
 }

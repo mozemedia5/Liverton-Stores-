@@ -1,9 +1,9 @@
 import { z } from "zod";
 import { adminProcedure, publicProcedure, router } from "../_core/trpc";
+import { listPublishedFirebaseBanners } from "../firebaseData";
 import {
   createStorefrontBanner,
   listAllBanners,
-  listPublishedBanners,
   updateStorefrontBanner,
 } from "../storefrontContent.db";
 
@@ -24,7 +24,7 @@ const bannerInput = z.object({
 });
 
 export const storefrontContentRouter = router({
-  publishedBanners: publicProcedure.query(() => listPublishedBanners()),
+  publishedBanners: publicProcedure.query(() => listPublishedFirebaseBanners()),
   admin: router({
     listBanners: adminProcedure.query(() => listAllBanners()),
     createBanner: adminProcedure

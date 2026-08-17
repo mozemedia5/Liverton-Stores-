@@ -1,98 +1,89 @@
-import { startLogin } from "@/const";
-import { trpc } from "@/lib/trpc";
-import { TRPCClientError } from "@trpc/client";
-import { useCallback, useEffect, useMemo } from "react";
+import { doc, getFirestore, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
+import { onAuthStateChanged, type User as FirebaseUser } from "firebase/auth";
+import { useCallback, useEffect, useState } from "react";
+import { getFirebaseApp, getFirebaseAuth } from "@/lib/firebase";
 
-type UseAuthOptions = {
-  redirectOnUnauthenticated?: boolean;
-  redirectPath?: string;
+export type AppUser = {
+  id: number;
+  openId: string;
+  name: string | null;
+  email: string | null;
+  loginMethod: string;
+  role: "user" | "admin";
+  createdAt: Date;
+  updatedAt: Date;
+  lastSignedIn: Date;
 };
 
-export function useAuth(options?: UseAuthOptions) {
-  // Login is started via startLogin() in the effect below, only when we actually
-  // navigate — never during render. startLogin() mints a one-time nonce + writes
-  // the state cookie, so calling it per render would overwrite the cookie and
-  // desync it from an in-flight login's `state`.
-  const { redirectOnUnauthenticated = false, redirectPath } = options ?? {};
-  const utils = trpc.useUtils();
+function mapFirebaseUser(user: FirebaseUser, role: "user" | "admin"): AppUser {
+  const now = new Date();
+  return {
+    id: 0,
+    openId: user.uid,
+    name: user.displayName,
+    email: user.email,
+    loginMethod: user.providerData[0]?.providerId ?? "firebase",
+    role,
+    createdAt: new Date(user.metadata.creationTime ?? now),
+    updatedAt: now,
+    lastSignedIn: now,
+  };
+}
 
-  const meQuery = trpc.auth.me.useQuery(undefined, {
-    retry: false,
-    refetchOnWindowFocus: false,
-  });
+async function resolveAppUser(user: FirebaseUser): Promise<AppUser> {
+  const token = await user.getIdTokenResult();
+  const claimRole = token.claims.admin === true ? "admin" : "user";
+  const app = getFirebaseApp();
+  if (!app) return mapFirebaseUser(user, claimRole);
+  const profileRef = doc(getFirestore(app), "users", user.uid);
+  const profile = await getDoc(profileRef);
+  const data = profile.data() as { role?: "user" | "admin" } | undefined;
+  const role = claimRole === "admin" || data?.role === "admin" ? "admin" : "user";
+  if (!profile.exists()) {
+    await setDoc(profileRef, {
+      uid: user.uid,
+      name: user.displayName ?? null,
+      email: user.email ?? null,
+      role,
+      loginMethod: user.providerData[0]?.providerId ?? "firebase",
+      createdAt: serverTimestamp(),
+      lastSignedIn: serverTimestamp(),
+    });
+  }
+  return mapFirebaseUser(user, role);
+}
 
-  const logoutMutation = trpc.auth.logout.useMutation({
-    onSuccess: () => {
-      utils.auth.me.setData(undefined, null);
-    },
-  });
-
-  const logout = useCallback(async () => {
-    try {
-      await logoutMutation.mutateAsync();
-    } catch (error: unknown) {
-      if (
-        error instanceof TRPCClientError &&
-        error.data?.code === "UNAUTHORIZED"
-      ) {
-        return;
-      }
-      throw error;
-    } finally {
-      // Clear the Preview auto-login token mirrored into sessionStorage, so
-      // header-based sessions (Safari ITP / WebView) are logged out too. The
-      // backend cookie is cleared by the logout mutation.
-      try {
-        sessionStorage.removeItem("manus-cookie");
-      } catch {}
-      utils.auth.me.setData(undefined, null);
-      await utils.auth.me.invalidate();
-    }
-  }, [logoutMutation, utils]);
-
-  const state = useMemo(() => {
-    localStorage.setItem(
-      "manus-runtime-user-info",
-      JSON.stringify(meQuery.data)
-    );
-    return {
-      user: meQuery.data ?? null,
-      loading: meQuery.isLoading || logoutMutation.isPending,
-      error: meQuery.error ?? logoutMutation.error ?? null,
-      isAuthenticated: Boolean(meQuery.data),
-    };
-  }, [
-    meQuery.data,
-    meQuery.error,
-    meQuery.isLoading,
-    logoutMutation.error,
-    logoutMutation.isPending,
-  ]);
+export function useAuth(_options?: { redirectOnUnauthenticated?: boolean; redirectPath?: string }) {
+  const [user, setUser] = useState<AppUser | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<unknown>(null);
 
   useEffect(() => {
-    if (!redirectOnUnauthenticated) return;
-    if (meQuery.isLoading || logoutMutation.isPending) return;
-    if (state.user) return;
-    if (typeof window === "undefined") return;
-    if (redirectPath && window.location.pathname === redirectPath) return;
-
-    // Navigate at this moment only. startLogin() mints the nonce + cookie itself.
-    if (redirectPath) {
-      window.location.href = redirectPath;
-    } else {
-      startLogin();
+    const auth = getFirebaseAuth();
+    if (!auth) {
+      setError(new Error("VITE_FIREBASE_CONFIG_JSON is not configured"));
+      setLoading(false);
+      return;
     }
-  }, [
-    redirectOnUnauthenticated,
-    redirectPath,
-    logoutMutation.isPending,
-    meQuery.isLoading,
-    state.user,
-  ]);
+    return onAuthStateChanged(auth, async firebaseUser => {
+      setLoading(true);
+      setError(null);
+      try {
+        setUser(firebaseUser ? await resolveAppUser(firebaseUser) : null);
+      } catch (nextError) {
+        setUser(null);
+        setError(nextError);
+      } finally {
+        setLoading(false);
+      }
+    });
+  }, []);
 
-  return {
-    ...state,
-    refresh: () => meQuery.refetch(),
-    logout,
-  };
+  const logout = useCallback(async () => {
+    const auth = getFirebaseAuth();
+    if (auth) await auth.signOut();
+    setUser(null);
+  }, []);
+
+  return { user, loading, error, isAuthenticated: Boolean(user), refresh: async () => undefined, logout };
 }

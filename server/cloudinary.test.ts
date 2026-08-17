@@ -16,7 +16,7 @@ describe("Cloudinary and Shopify environment contracts", () => {
     expect(template).toContain("CLOUDINARY_API_KEY=");
     expect(template).toContain("CLOUDINARY_API_SECRET=");
     expect(template).toContain("CLOUDINARY_UPLOAD_PRESET=");
-    expect(template).toContain("Published banner media and copy are managed in Admin-Store");
+    expect(template).toContain("Banner media and copy are managed in Admin-Store");
     expect(template).not.toContain("VITE_CLOUDINARY_CLOUD_NAME=");
     expect(template).not.toContain("VITE_CLOUDINARY_BANNER_VIDEO_PUBLIC_ID=");
     expect(template).not.toContain("VITE_CLOUDINARY_BANNER_POSTER_PUBLIC_ID=");

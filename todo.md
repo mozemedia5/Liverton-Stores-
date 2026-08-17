@@ -128,11 +128,14 @@
 - [x] Take a fresh mobile screenshot of the cleaned Home page and confirm the announcement strip and hero remain usable
 - [x] Save and auto-publish a new checkpoint containing the Home cleanup, then verify the published version
 
-- [ ] Remove homepage banner URL/public-ID configuration from Vercel as the source of truth
-- [ ] Add shared backend content contracts for published storefront banners and media metadata
-- [ ] Make the storefront read published banner content from the shared backend with safe empty states
-- [ ] Create a separate GitHub repository named Admin-Store without exposing it through the public storefront navigation
-- [ ] Build a responsive Admin-Store dashboard using the Liverton visual language and protected admin authorization
-- [ ] Add Admin-Store banner/media management groundwork connected to the shared backend and Cloudinary signing flow
-- [ ] Reuse the same Shopify, Firebase/auth, database, and Cloudinary environment variable names without committing values
-- [ ] Add tests, deployment documentation, responsive verification, and push both repositories
+- [x] Remove homepage banner URL/public-ID configuration from Vercel as the source of truth
+- [x] Add shared backend content contracts for published storefront banners and media metadata
+- [x] Make the storefront read published banner content from the shared backend with safe empty states
+- [x] Create a separate private GitHub repository named Admin-Store without exposing it through the public storefront navigation
+- [x] Build a responsive Admin-Store dashboard using the Liverton visual language and protected admin authorization
+- [x] Add Admin-Store banner/media management groundwork connected to the shared backend and Cloudinary signing flow
+- [x] Reuse the same Shopify, Firebase/auth, database, and Cloudinary environment variable names without committing values
+- [x] Add tests, deployment documentation, responsive verification, and push both repositories
+
+- [x] Capture Admin-Store desktop review and verify tablet/mobile sidebar, tables, and form behavior through the responsive breakpoint audit
+- [x] Add an Admin-Store-specific responsive verification note documenting the checked breakpoints and key workflows

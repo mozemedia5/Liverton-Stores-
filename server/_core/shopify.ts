@@ -42,7 +42,12 @@ function getShopifyStoreDomain(): string {
   return process.env.SHOPIFY_STORE_DOMAIN ?? "";
 }
 function getShopifyStorefrontToken(): string {
-  return process.env.SHOPIFY_STOREFRONT_API_ACCESS_TOKEN ?? "";
+  return (
+    process.env.SHOPIFY_STOREFRONT_PRIVATE_ACCESS_TOKEN ??
+    process.env.SHOPIFY_STOREFRONT_API_ACCESS_TOKEN ??
+    process.env.SHOPIFY_STOREFRONT_PUBLIC_ACCESS_TOKEN ??
+    ""
+  );
 }
 export function isShopifyConfigured(): boolean {
   return Boolean(getShopifyStoreDomain() && getShopifyStorefrontToken());

@@ -8,8 +8,16 @@ export const ENV = {
   forgeApiUrl: process.env.BUILT_IN_FORGE_API_URL ?? "",
   forgeApiKey: process.env.BUILT_IN_FORGE_API_KEY ?? "",
   shopifyStoreDomain: process.env.SHOPIFY_STORE_DOMAIN ?? "",
-  shopifyStorefrontApiAccessToken: process.env.SHOPIFY_STOREFRONT_API_ACCESS_TOKEN ?? "",
+  shopifyStorefrontApiAccessToken:
+    process.env.SHOPIFY_STOREFRONT_PRIVATE_ACCESS_TOKEN ??
+    process.env.SHOPIFY_STOREFRONT_API_ACCESS_TOKEN ??
+    process.env.SHOPIFY_STOREFRONT_PUBLIC_ACCESS_TOKEN ??
+    "",
   shopifyAdminAccessToken: process.env.SHOPIFY_ADMIN_ACCESS_TOKEN ?? "",
   shopifyClientId: process.env.SHOPIFY_CLIENT_ID ?? "",
   shopifyApiSecret: process.env.SHOPIFY_API_SECRET ?? "",
+  cloudinaryCloudName: process.env.CLOUDINARY_CLOUD_NAME ?? "",
+  cloudinaryApiKey: process.env.CLOUDINARY_API_KEY ?? "",
+  cloudinaryApiSecret: process.env.CLOUDINARY_API_SECRET ?? "",
+  cloudinaryUploadPreset: process.env.CLOUDINARY_UPLOAD_PRESET ?? "",
 };

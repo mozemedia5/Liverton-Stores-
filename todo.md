@@ -79,7 +79,7 @@
 - [x] Add a DOM test for ProductsPageView error state and alert output
 - [x] Add a DOM test for ProductsPageView ready state with a rendered product
 
-- [ ] Rotate the Shopify Admin/API credentials that were pasted into chat and keep all replacement values out of source control
+- [x] Keep pasted Shopify Admin/API credentials unused and out of source control; user-side revocation and rotation is required before Admin operations are enabled
 - [x] Define safe Vercel environment-variable names for Firebase public config, Shopify Storefront access, Shopify Admin server access, and dashboard media
 - [x] Add names-only deployment variable documentation using VERCEL_ENV_TEMPLATE.txt and VERCEL.md; do not commit .env files
 - [x] Replace supported Firebase, Shopify Storefront, Admin-name, and banner configuration surfaces with environment-backed runtime configuration; document intentional UI fallbacks
@@ -89,17 +89,17 @@
 - [x] Verify dashboard banners use the intended configurable slots and remove misplaced banner UI
 - [x] Run all checks and production build, then push the verified update to GitHub
 
-- [ ] Revoke and rotate the Shopify Admin token and app secret that were pasted into chat before enabling server-side Admin operations
+- [x] Keep server-side Shopify Admin operations disabled until the user revokes and rotates the pasted token and app secret
 - [x] Do not commit, hardcode, or reuse any pasted credential values; use Vercel environment variables only
 
 - [x] Add environment-variable names only for Firebase, Shopify Admin/server settings, and dashboard banner overrides
-- [x] Add or update .env.example and Vercel deployment documentation without any credential values
+- [x] Add or update names-only Vercel environment documentation without any credential values; the managed project uses VERCEL_ENV_TEMPLATE.txt instead of .env.example
 - [x] Make footer and primary-navigation destinations route to real pages and scroll to the top after navigation
 - [x] Ensure footer destinations are represented in the main navigation/sidebar where appropriate
 - [x] Verify and polish mobile, tablet, laptop, and desktop responsive layouts
 - [x] Move dashboard banner content into the intended configurable banner slots and remove misplaced banner UI
 - [x] Run all checks and a successful production build
-- [ ] Push the verified implementation to GitHub and verify origin/main
+- [x] Push the verified implementation to GitHub and verify origin/main
 
 - [x] Document VERCEL_ENV_TEMPLATE.txt as the official substitute for the blocked .env.example file
 - [x] Freshly verify updated navigation, footer, and banner layouts at mobile, tablet, laptop, and desktop breakpoints
@@ -108,3 +108,22 @@
 
 - [x] Document the top announcement as intentionally separate from the configurable dashboard banner area
 - [x] Add a persistent responsive verification note covering mobile, tablet, laptop, and desktop screenshots
+
+- [x] Reconcile Shopify Storefront public token, Admin client ID, and Admin secret variable names without exposing values
+- [x] Add Cloudinary cloud name, API key, upload preset, and server secret variable contract
+- [x] Replace dashboard media URL-only guidance with Cloudinary-backed media configuration
+- [x] Add protected admin media upload groundwork using Cloudinary signed uploads or server-side signing
+- [x] Document Cloudinary upload presets and Vercel environment names
+- [x] Add tests for Cloudinary configuration and Shopify environment contracts
+- [x] Run checks, production build, visual verification, and save a final checkpoint
+
+- [x] Replace retired banner URL names in RESPONSIVE_VERIFICATION.md and add a regression assertion for the Cloudinary public-ID contract
+
+- [x] Remove the two upper dashboard banner cards from the Home page while preserving the top announcement strip
+- [x] Verify the cleaned Home page at desktop and mobile breakpoints and rerun tests
+- [x] Save and publish the homepage cleanup checkpoint
+
+- [ ] Push the homepage banner removal together with all Cloudinary and Shopify environment changes to GitHub and verify origin/main
+
+- [x] Take a fresh mobile screenshot of the cleaned Home page and confirm the announcement strip and hero remain usable
+- [ ] Save and auto-publish a new checkpoint containing the Home cleanup, then verify the published version

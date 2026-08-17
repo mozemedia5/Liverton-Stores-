@@ -1,3 +1,10 @@
+const cloudinaryCloudName = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME ?? "";
+
+function cloudinaryDeliveryUrl(publicId: string, resourceType: "image" | "video") {
+  if (!cloudinaryCloudName || !publicId) return "";
+  return `https://res.cloudinary.com/${cloudinaryCloudName}/${resourceType}/upload/f_auto,q_auto/${publicId}`;
+}
+
 export const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY ?? "",
   authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN ?? "",
@@ -9,8 +16,17 @@ export const firebaseConfig = {
 };
 
 export const dashboardBannerConfig = {
-  videoUrl: import.meta.env.VITE_LIVERTON_BANNER_VIDEO_URL ?? "",
-  posterUrl: import.meta.env.VITE_LIVERTON_BANNER_POSTER_URL ?? "",
+  cloudName: cloudinaryCloudName,
+  videoPublicId: import.meta.env.VITE_CLOUDINARY_BANNER_VIDEO_PUBLIC_ID ?? "",
+  posterPublicId: import.meta.env.VITE_CLOUDINARY_BANNER_POSTER_PUBLIC_ID ?? "",
+  videoUrl: cloudinaryDeliveryUrl(
+    import.meta.env.VITE_CLOUDINARY_BANNER_VIDEO_PUBLIC_ID ?? "",
+    "video"
+  ),
+  posterUrl: cloudinaryDeliveryUrl(
+    import.meta.env.VITE_CLOUDINARY_BANNER_POSTER_PUBLIC_ID ?? "",
+    "image"
+  ),
   title: import.meta.env.VITE_LIVERTON_BANNER_TITLE ?? "",
   body: import.meta.env.VITE_LIVERTON_BANNER_BODY ?? "",
 };

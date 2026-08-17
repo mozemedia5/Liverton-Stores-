@@ -8,12 +8,13 @@ The review confirmed that the mobile menu replaces the desktop navigation withou
 
 The home page intentionally contains two different promotional surfaces with different jobs. The slim top announcement bar is a site-wide status/announcement strip for short-lived operational or campaign messages. The `dashboard-banners` region is the single configurable media area for video, poster, announcement, and promotional content. The former duplicate lower dashboard-card strip has been removed, so configurable media is not duplicated elsewhere on the home page.
 
-The configurable media region can be changed without editing React code through these optional Vercel variables:
+The configurable media region can be changed without editing React code through these optional Vercel variables. Media is stored in Cloudinary; the storefront receives only the public cloud name and public IDs:
 
 | Variable | Role |
 |---|---|
-| `VITE_LIVERTON_BANNER_VIDEO_URL` | Video source for the media slot |
-| `VITE_LIVERTON_BANNER_POSTER_URL` | Poster image shown before playback |
+| `VITE_CLOUDINARY_CLOUD_NAME` | Public Cloudinary cloud name |
+| `VITE_CLOUDINARY_BANNER_VIDEO_PUBLIC_ID` | Public ID for the media-slot video |
+| `VITE_CLOUDINARY_BANNER_POSTER_PUBLIC_ID` | Public ID for the poster image |
 | `VITE_LIVERTON_BANNER_TITLE` | Media banner title override |
 | `VITE_LIVERTON_BANNER_BODY` | Media banner copy override |
 

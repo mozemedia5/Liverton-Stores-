@@ -109,12 +109,12 @@ function upsertJsonLd(value: unknown) {
 }
 
 export function getSeoConfig(pathname: string): SeoConfig {
-  return routeSeo[pathname] ?? {
-    title: "Page not found — Liverton",
-    description: "The Liverton page you requested could not be found.",
-    kind: "utility",
-    noindex: true,
-  };
+  const normalized = pathname.replace(/\/$/, "") || "/";
+  if (routeSeo[normalized]) return routeSeo[normalized];
+  if (/^\/product\/[^/]+$/.test(normalized)) return { title: "Product details — Liverton", description: "Explore detailed product information, reviews, variants, and secure checkout at Liverton Stores.", kind: "website" };
+  if (normalized === "/account") return { title: "Your account — Liverton", description: "Sign in or create a Liverton account, manage orders, and get customer support.", kind: "website" };
+  if (normalized === "/checkout") return { title: "Checkout — Liverton", description: "Review your Liverton collection and continue to secure checkout.", kind: "utility" };
+  return { title: "Page not found — Liverton", description: "The Liverton page you requested could not be found.", kind: "utility", noindex: true };
 }
 
 export function applySeo(pathname: string, products: SeoProduct[] = []) {
@@ -123,7 +123,7 @@ export function applySeo(pathname: string, products: SeoProduct[] = []) {
   const origin = window.location.origin;
   const canonicalPath = pathname === "/" ? "/" : pathname.replace(/\/$/, "");
   const canonical = `${origin}${canonicalPath}`;
-  const pageName = config.title.replace(" — Liverton", "");
+  const pageName = config.title.replace(/ — Liverton$/, "");
 
   document.documentElement.lang = "en";
   document.title = config.title;

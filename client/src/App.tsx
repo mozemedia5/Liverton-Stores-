@@ -18,10 +18,10 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sh
 import ErrorBoundary from "./components/ErrorBoundary";
 import NotFound from "@/pages/NotFound";
 import CloudinaryMediaAdmin from "@/pages/CloudinaryMediaAdmin";
-import { ArrowRight, ArrowUpRight, BadgeCheck, BarChart3, ChevronRight, CircleHelp, Cpu, Download, Headphones, HeartHandshake, Laptop, Lightbulb, Mail, Menu, MessageCircle, Package, Play, Plus, Search, Send, ShieldCheck, ShoppingBag, Sparkles, Store, TabletSmartphone, Truck, X, Zap } from "lucide-react";
+import { ArrowRight, ArrowUpRight, BadgeCheck, BarChart3, Camera, Cable, ChevronRight, CircleHelp, Cpu, Download, Gamepad2, Headphones, HeartHandshake, Laptop, Lightbulb, Mail, Menu, MessageCircle, Package, Play, Plus, Search, Send, ShieldCheck, ShoppingBag, Sparkles, Store, TabletSmartphone, Truck, Wifi, X, Zap } from "lucide-react";
 import { PremiumNavbar, PremiumFooter, EnhancedProductDetail, FunctionalCheckoutPage, AccountPage, LocalCartPanel, LoginPrompt, type StoreProduct } from "@/components/StorefrontEnhancements";
 
-type Product = { id: string; title: string; type: string; description: string; price: string; image: string; badge?: string; arrival?: string; variantId?: string };
+type Product = { id: string; title: string; type: string; description: string; price: string; image: string; badge?: string; arrival?: string; variantId?: string; selectedVariant?: string };
 const products: Product[] = [
   { id: "buds", title: "Liverton Buds Pro", type: "Audio", description: "Immersive ANC with a 40-hour case and all-day comfort.", price: "129", badge: "Bestseller", image: "https://images.unsplash.com/photo-1606220588913-b3aacb4d2f46?w=600&q=85" },
   { id: "watch", title: "Liverton Watch X", type: "Wearables", description: "A calm command center for health, messages, and movement.", price: "199", badge: "New", arrival: "Arrived Aug 2026", image: "https://images.unsplash.com/photo-1579586337278-3befd40fd17a?w=600&q=85" },
@@ -32,12 +32,20 @@ const products: Product[] = [
   { id: "headphones", title: "Liverton Headphones Max", type: "Audio", description: "Studio-scale sound with adaptive listening modes.", price: "349", image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600&q=85" },
   { id: "tablet", title: "Liverton Tablet Pro", type: "Computing", description: "A bright, flexible canvas for notes, media, and ideas.", price: "649", badge: "Sale", image: "https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=600&q=85" },
   { id: "display", title: "Liverton Smart Display", type: "Smart Home", description: "Your daily glanceable dashboard for home and schedule.", price: "179", image: "https://images.unsplash.com/photo-1558089687-f282ffcbc126?w=600&q=85" },
+  { id: "gamepad", title: "Liverton Play Controller", type: "Gaming", description: "Low-latency control with adaptive haptics for focused play.", price: "89", badge: "New", image: "https://images.unsplash.com/photo-1592840496694-26d035b52b48?w=600&q=85" },
+  { id: "camera", title: "Liverton Capture Mini", type: "Cameras", description: "A pocket-ready camera for bright, expressive everyday stories.", price: "429", image: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=600&q=85" },
+  { id: "cable", title: "Liverton Link Cable", type: "Accessories", description: "Braided high-speed charging and data in one quiet essential.", price: "29", badge: "Essential", image: "https://images.unsplash.com/photo-1583863788434-e58a36330cf0?w=600&q=85" },
+  { id: "router", title: "Liverton Mesh One", type: "Networking", description: "Whole-home connectivity designed to stay out of the way.", price: "159", image: "https://images.unsplash.com/photo-1606904825846-647eb07f5be2?w=600&q=85" },
 ];
 const categories = [
   ["Audio", Headphones, "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=900&q=85"],
   ["Wearables", HeartHandshake, "https://images.unsplash.com/photo-1579586337278-3befd40fd17a?w=900&q=85"],
   ["Computing", Laptop, "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=900&q=85"],
   ["Smart Home", Store, "https://images.unsplash.com/photo-1545454675-3531b543be5d?w=900&q=85"],
+  ["Gaming", Gamepad2, "https://images.unsplash.com/photo-1592840496694-26d035b52b48?w=900&q=85"],
+  ["Cameras", Camera, "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=900&q=85"],
+  ["Accessories", Cable, "https://images.unsplash.com/photo-1583863788434-e58a36330cf0?w=900&q=85"],
+  ["Networking", Wifi, "https://images.unsplash.com/photo-1606904825846-647eb07f5be2?w=900&q=85"],
 ] as const;
 function BrandMark() { return <span className="brand-mark"><span>×</span><i /></span>; }
 function PageHeader({ label, title, description }: { label: string; title: ReactNode; description: string }) { return <div className="page-header"><span className="eyebrow"><Sparkles size={14} /> {label}</span><h1>{title}</h1><p>{description}</p></div>; }

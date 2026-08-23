@@ -2,7 +2,7 @@ import { publicProcedure, router } from "./_core/trpc.js";
 import { getFirebaseAdmin } from "./firebaseAdmin.js";
 import { z } from "zod";
 import { commerceRouter } from "./routerModules/commerce.js";
-import { CONTACT_EMAIL } from "../shared/contact";
+import { CONTACT_EMAIL } from "../shared/contact.js";
 import { cloudinaryRouter } from "./routerModules/cloudinary.js";
 import { storefrontContentRouter } from "./routerModules/storefrontContent.js";
 import { usersRouter } from "./routerModules/users.js";

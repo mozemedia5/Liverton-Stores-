@@ -1,4 +1,4 @@
-import type { Product } from "../shared/commerce/types";
+import type { Product } from "../shared/commerce/types.js";
 
 export function toPublicCatalogProduct(product: Product) {
   return {

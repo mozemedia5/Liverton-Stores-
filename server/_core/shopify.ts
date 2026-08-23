@@ -18,7 +18,7 @@
  */
 
 import { TRPCError } from "@trpc/server";
-import type { Cart, Collection, Product } from "../../shared/commerce/types";
+import type { Cart, Collection, Product } from "../../shared/commerce/types.js";
 import {
   type RawCart,
   type RawCollection,

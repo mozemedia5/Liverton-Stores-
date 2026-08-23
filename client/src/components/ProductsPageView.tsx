@@ -15,5 +15,5 @@ type ProductsPageViewProps = {
 };
 
 export function ProductsPageView({ arrivals, header, arrivalBanner, filters, currentFilter, onFilter, isLoading, hasError, products, renderProduct }: ProductsPageViewProps) {
-  return <main className="page-wrap">{header}{!arrivals && <CatalogFilterControls filters={filters} currentFilter={currentFilter} onSelect={onFilter} />}{arrivals && arrivalBanner}<CatalogStateFeedback isLoading={isLoading} hasError={hasError} itemCount={products.length} /><div className="product-grid" aria-live="polite">{products.map(renderProduct)}</div></main>;
+  return <main className="page-wrap">{header}{!arrivals && <CatalogFilterControls filters={filters} currentFilter={currentFilter} onSelect={onFilter} />}{arrivals && arrivalBanner}<CatalogStateFeedback isLoading={isLoading} hasError={hasError} itemCount={products.length} /><div className="product-grid" aria-live="polite">{products.map(product => <React.Fragment key={product.id}>{renderProduct(product)}</React.Fragment>)}</div></main>;
 }

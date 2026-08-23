@@ -1,11 +1,12 @@
 import { publicProcedure, router } from "./_core/trpc";
 import { getFirebaseAdmin } from "./firebaseAdmin";
 import { z } from "zod";
-import { commerceRouter } from "./routers/commerce";
+import { commerceRouter } from "./routerModules/commerce";
 import { CONTACT_EMAIL } from "@shared/contact";
-import { cloudinaryRouter } from "./routers/cloudinary";
-import { storefrontContentRouter } from "./routers/storefrontContent";
-import { usersRouter } from "./routers/users";
+import { cloudinaryRouter } from "./routerModules/cloudinary";
+import { storefrontContentRouter } from "./routerModules/storefrontContent";
+import { usersRouter } from "./routerModules/users";
+import { generateHannaReply } from "./hanna";
 
 export const appRouter = router({
   commerce: commerceRouter,
@@ -28,7 +29,7 @@ export const appRouter = router({
   hanna: router({
     chat: publicProcedure
       .input(z.object({ messages: z.array(z.object({ role: z.enum(["user", "assistant", "system"]), content: z.string() })).min(1).max(30) }))
-      .mutation(() => "Hanna support is available for product, delivery, returns, warranty, and accessibility questions. For order-specific help, please use the Liverton Support page."),
+      .mutation(({ input }) => generateHannaReply(input.messages)),
   }),
   auth: router({
     me: publicProcedure.query(opts => opts.ctx.user),

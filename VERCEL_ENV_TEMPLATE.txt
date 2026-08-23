@@ -16,7 +16,7 @@ SHOPIFY_STOREFRONT_API_ACCESS_TOKEN=
 
 # Hanna AI — server-only Gemini API access
 GEMINI_API_KEY=
-# Optional model override; defaults to gemini-2.5-flash
+# Optional model override; defaults to gemini-3.6-flash
 HANNA_GEMINI_MODEL=
 
 # Shopify webhooks and Admin API (server-only)

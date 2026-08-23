@@ -13,7 +13,7 @@ type GeminiResponse = {
   error?: { message?: string };
 };
 
-const DEFAULT_MODEL = "gemini-2.5-flash";
+const DEFAULT_MODEL = "gemini-3.6-flash";
 const LIVERTON_SYSTEM_INSTRUCTION = `You are Hanna, the warm and practical AI support agent for Liverton Stores.
 Help customers choose products, understand product details, delivery, returns, warranty, accessibility, and general store questions.
 Use only the information present in the conversation and the product context supplied by the customer. Never invent order status, prices, stock, delivery dates, policies, discounts, or account information.
@@ -65,7 +65,7 @@ export async function generateHannaReply(messages: HannaMessage[]) {
         maxOutputTokens: 600,
       },
     }),
-    signal: AbortSignal.timeout(25_000),
+    signal: AbortSignal.timeout(60_000),
   });
 
   const payload = (await response.json().catch(() => ({}))) as GeminiResponse;

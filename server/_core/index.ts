@@ -8,6 +8,7 @@ import { createContext } from "./context";
 import { serveStatic, setupVite } from "./vite";
 import { listProducts } from "./shopify";
 import { buildPublicCatalogResponse } from "../publicCatalog";
+import { processShopifyWebhook, verifyShopifyWebhook } from "../shopifyWebhooks";
 
 function isPortAvailable(port: number): Promise<boolean> {
   return new Promise(resolve => {
@@ -31,6 +32,35 @@ async function findAvailablePort(startPort: number = 3000): Promise<number> {
 async function startServer() {
   const app = express();
   const server = createServer(app);
+  // Shopify requires HMAC verification against the raw request body. Keep this
+  // endpoint before JSON parsing so the signature can be verified safely.
+  app.post("/api/shopify/webhooks", express.raw({ type: "*/*", limit: "2mb" }), async (req, res) => {
+    const rawBody = Buffer.isBuffer(req.body) ? req.body : Buffer.from(req.body ?? "");
+    const valid = verifyShopifyWebhook(rawBody, req.header("X-Shopify-Hmac-Sha256"), process.env.SHOPIFY_WEBHOOK_SECRET ?? process.env.SHOPIFY_API_SECRET ?? "");
+    if (!valid) {
+      res.status(401).json({ error: "Invalid Shopify webhook signature" });
+      return;
+    }
+    const webhookId = req.header("X-Shopify-Webhook-Id");
+    const topic = req.header("X-Shopify-Topic") ?? "unknown";
+    if (!webhookId) {
+      res.status(400).json({ error: "Missing Shopify webhook ID" });
+      return;
+    }
+    try {
+      const result = await processShopifyWebhook({
+        rawBody,
+        topic,
+        webhookId,
+        eventId: req.header("X-Shopify-Event-Id") ?? undefined,
+        triggeredAt: req.header("X-Shopify-Triggered-At") ?? undefined,
+      });
+      res.status(200).json({ ok: true, duplicate: result.duplicate });
+    } catch (error) {
+      console.error("[Shopify webhook] Processing failed", { topic, webhookId, error });
+      res.status(500).json({ error: "Webhook processing failed" });
+    }
+  });
   // Configure body parser with larger size limit for file uploads
   app.use(express.json({ limit: "50mb" }));
   app.use(express.urlencoded({ limit: "50mb", extended: true }));

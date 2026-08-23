@@ -30,7 +30,8 @@ describe("Liverton storefront contract", () => {
   it("supports storefront interactions, contact delivery, and banner slots", () => {
     expect(app).toContain("liverton-cart-updated");
     expect(app).toContain("translateY(${shift}px)");
-    expect(app).toContain("remoteTitles");
+    expect(app).toContain("featuredShopify");
+    expect(app).toContain("useShopifyCatalogSync");
     expect(contact).toContain("livertoncodes@gmail.com");
     expect(app).toContain("+256 705 954 597");
     expect(app).toContain("publishedBanners");

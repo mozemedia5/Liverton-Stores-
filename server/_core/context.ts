@@ -26,7 +26,9 @@ async function authenticateFirebaseRequest(req: CreateExpressContextOptions["req
     const profileRef = firestore.collection("users").doc(decoded.uid);
     const profileSnapshot = await profileRef.get();
     const profile = profileSnapshot.exists ? profileSnapshot.data() ?? {} : {};
-    const role = decoded.admin === true || profile.role === "admin" ? "admin" : "user";
+    // Firestore profile fields are user-editable metadata; only a verified,
+    // server-managed custom claim may grant administrator access.
+    const role = decoded.email_verified === true && decoded.admin === true ? "admin" : "user";
     const now = new Date();
 
     if (!profileSnapshot.exists) {

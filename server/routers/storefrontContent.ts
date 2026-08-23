@@ -1,11 +1,10 @@
 import { z } from "zod";
 import { adminProcedure, publicProcedure, router } from "../_core/trpc";
-import { listPublishedFirebaseBanners } from "../firebaseData";
 import {
-  createStorefrontBanner,
-  listAllBanners,
-  updateStorefrontBanner,
-} from "../storefrontContent.db";
+  createFirebaseBanner,
+  listFirebaseBanners,
+  updateFirebaseBanner,
+} from "../firebaseData";
 
 const bannerInput = z.object({
   slug: z.string().trim().min(2).max(160),
@@ -24,19 +23,19 @@ const bannerInput = z.object({
 });
 
 export const storefrontContentRouter = router({
-  publishedBanners: publicProcedure.query(() => listPublishedFirebaseBanners()),
+  publishedBanners: publicProcedure.query(() => listFirebaseBanners(true)),
   admin: router({
-    listBanners: adminProcedure.query(() => listAllBanners()),
+    listBanners: adminProcedure.query(() => listFirebaseBanners(false)),
     createBanner: adminProcedure
       .input(bannerInput)
       .mutation(({ input, ctx }) =>
-        createStorefrontBanner({ ...input, createdBy: ctx.user.openId })
+        createFirebaseBanner({ ...input, createdBy: ctx.user.openId, actionLabel: input.actionLabel ?? null, href: input.href ?? null, mediaUrl: input.mediaUrl ?? null, posterUrl: input.posterUrl ?? null, cloudinaryPublicId: input.cloudinaryPublicId ?? null, body: input.body ?? null, startsAt: input.startsAt ?? null, endsAt: input.endsAt ?? null })
       ),
     updateBanner: adminProcedure
-      .input(bannerInput.partial().extend({ id: z.number().int().positive() }))
+      .input(bannerInput.partial().extend({ id: z.string().min(1) }))
       .mutation(({ input }) => {
         const { id, ...changes } = input;
-        return updateStorefrontBanner(id, changes);
+        return updateFirebaseBanner(id, changes);
       }),
   }),
 });

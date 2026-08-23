@@ -1,5 +1,5 @@
 import { doc, getFirestore, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
-import { onAuthStateChanged, type User as FirebaseUser } from "firebase/auth";
+import { onIdTokenChanged, type User as FirebaseUser } from "firebase/auth";
 import { useCallback, useEffect, useState } from "react";
 import { getFirebaseApp, getFirebaseAuth } from "@/lib/firebase";
 
@@ -10,6 +10,7 @@ export type AppUser = {
   email: string | null;
   loginMethod: string;
   role: "user" | "admin";
+  emailVerified: boolean;
   createdAt: Date;
   updatedAt: Date;
   lastSignedIn: Date;
@@ -24,6 +25,7 @@ function mapFirebaseUser(user: FirebaseUser, role: "user" | "admin"): AppUser {
     email: user.email,
     loginMethod: user.providerData[0]?.providerId ?? "firebase",
     role,
+    emailVerified: user.emailVerified,
     createdAt: new Date(user.metadata.creationTime ?? now),
     updatedAt: now,
     lastSignedIn: now,
@@ -34,11 +36,11 @@ async function resolveAppUser(user: FirebaseUser): Promise<AppUser> {
   const token = await user.getIdTokenResult();
   const claimRole = token.claims.admin === true ? "admin" : "user";
   const app = getFirebaseApp();
-  if (!app) return mapFirebaseUser(user, claimRole);
+  if (!app) return mapFirebaseUser(user, user.emailVerified ? claimRole : "user");
   const profileRef = doc(getFirestore(app), "users", user.uid);
   const profile = await getDoc(profileRef);
   const data = profile.data() as { role?: "user" | "admin" } | undefined;
-  const role = claimRole === "admin" || data?.role === "admin" ? "admin" : "user";
+  const role = user.emailVerified && (claimRole === "admin" || data?.role === "admin") ? "admin" : "user";
   if (!profile.exists()) {
     await setDoc(profileRef, {
       uid: user.uid,
@@ -65,7 +67,7 @@ export function useAuth(_options?: { redirectOnUnauthenticated?: boolean; redire
       setLoading(false);
       return;
     }
-    return onAuthStateChanged(auth, async firebaseUser => {
+    return onIdTokenChanged(auth, async firebaseUser => {
       setLoading(true);
       setError(null);
       try {

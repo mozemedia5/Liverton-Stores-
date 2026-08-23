@@ -5,11 +5,13 @@ import { commerceRouter } from "./routers/commerce";
 import { CONTACT_EMAIL } from "@shared/contact";
 import { cloudinaryRouter } from "./routers/cloudinary";
 import { storefrontContentRouter } from "./routers/storefrontContent";
+import { usersRouter } from "./routers/users";
 
 export const appRouter = router({
   commerce: commerceRouter,
   cloudinary: cloudinaryRouter,
   storefrontContent: storefrontContentRouter,
+  users: usersRouter,
   contact: publicProcedure
     .input(z.object({
       name: z.string().trim().min(2).max(120),

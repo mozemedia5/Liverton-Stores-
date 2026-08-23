@@ -11,3 +11,18 @@ export function getFirebaseAuth(): Auth | null {
   const app = getFirebaseApp();
   return app ? getAuth(app) : null;
 }
+
+export function getFirebaseStatus() {
+  const configured = Boolean(
+    firebaseConfig.apiKey &&
+      firebaseConfig.authDomain &&
+      firebaseConfig.projectId &&
+      firebaseConfig.appId,
+  );
+  const app = configured ? getFirebaseApp() : null;
+  return {
+    configured,
+    projectId: firebaseConfig.projectId || null,
+    authReady: Boolean(app),
+  };
+}

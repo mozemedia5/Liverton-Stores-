@@ -26,7 +26,7 @@ import {
   normalizeCart,
   normalizeCollection,
   normalizeProduct,
-} from "./shopifyNormalize";
+} from "./shopifyNormalize.js";
 
 // ---------------------------------------------------------------------------
 // Configuration

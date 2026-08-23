@@ -1,6 +1,6 @@
 import type { CreateExpressContextOptions } from "@trpc/server/adapters/express";
-import type { User } from "../../drizzle/schema";
-import { getFirebaseAdmin } from "../firebaseAdmin";
+import type { User } from "../../drizzle/schema.js";
+import { getFirebaseAdmin } from "../firebaseAdmin.js";
 
 export type TrpcContext = {
   req: CreateExpressContextOptions["req"];

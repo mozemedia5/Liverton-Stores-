@@ -3,12 +3,12 @@ import express from "express";
 import { createServer } from "http";
 import net from "net";
 import { createExpressMiddleware } from "@trpc/server/adapters/express";
-import { appRouter } from "../routers";
-import { createContext } from "./context";
-import { serveStatic, setupVite } from "./vite";
-import { listProducts } from "./shopify";
-import { buildPublicCatalogResponse } from "../publicCatalog";
-import { processShopifyWebhook, verifyShopifyWebhook } from "../shopifyWebhooks";
+import { appRouter } from "../routers.js";
+import { createContext } from "./context.js";
+import { serveStatic, setupVite } from "./vite.js";
+import { listProducts } from "./shopify.js";
+import { buildPublicCatalogResponse } from "../publicCatalog.js";
+import { processShopifyWebhook, verifyShopifyWebhook } from "../shopifyWebhooks.js";
 
 function isPortAvailable(port: number): Promise<boolean> {
   return new Promise(resolve => {

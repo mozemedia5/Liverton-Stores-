@@ -1,10 +1,10 @@
 import { z } from "zod";
-import { adminProcedure, publicProcedure, router } from "../_core/trpc";
+import { adminProcedure, publicProcedure, router } from "../_core/trpc.js";
 import {
   createFirebaseBanner,
   listFirebaseBanners,
   updateFirebaseBanner,
-} from "../firebaseData";
+} from "../firebaseData.js";
 
 const bannerInput = z.object({
   slug: z.string().trim().min(2).max(160),

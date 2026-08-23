@@ -1,12 +1,12 @@
-import { publicProcedure, router } from "./_core/trpc";
-import { getFirebaseAdmin } from "./firebaseAdmin";
+import { publicProcedure, router } from "./_core/trpc.js";
+import { getFirebaseAdmin } from "./firebaseAdmin.js";
 import { z } from "zod";
-import { commerceRouter } from "./routerModules/commerce";
+import { commerceRouter } from "./routerModules/commerce.js";
 import { CONTACT_EMAIL } from "@shared/contact";
-import { cloudinaryRouter } from "./routerModules/cloudinary";
-import { storefrontContentRouter } from "./routerModules/storefrontContent";
-import { usersRouter } from "./routerModules/users";
-import { generateHannaReply } from "./hanna";
+import { cloudinaryRouter } from "./routerModules/cloudinary.js";
+import { storefrontContentRouter } from "./routerModules/storefrontContent.js";
+import { usersRouter } from "./routerModules/users.js";
+import { generateHannaReply } from "./hanna.js";
 
 export const appRouter = router({
   commerce: commerceRouter,

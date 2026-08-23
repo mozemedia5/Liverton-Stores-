@@ -1,10 +1,10 @@
 import "dotenv/config";
 import express from "express";
 import { createExpressMiddleware } from "@trpc/server/adapters/express";
-import { appRouter } from "../server/routers";
-import { createContext } from "../server/_core/context";
-import { listProducts } from "../server/_core/shopify";
-import { buildPublicCatalogResponse } from "../server/publicCatalog";
+import { appRouter } from "../server/routers.js";
+import { createContext } from "../server/_core/context.js";
+import { listProducts } from "../server/_core/shopify.js";
+import { buildPublicCatalogResponse } from "../server/publicCatalog.js";
 
 const app = express();
 app.use(express.json({ limit: "50mb" }));

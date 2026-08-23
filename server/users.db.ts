@@ -1,6 +1,6 @@
 import { desc, eq } from "drizzle-orm";
-import { users } from "../drizzle/schema";
-import { getDb } from "./db";
+import { users } from "../drizzle/schema.js";
+import { getDb } from "./db.js";
 
 export async function listUsers() {
   const db = await getDb();

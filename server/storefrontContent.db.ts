@@ -2,8 +2,8 @@ import { and, asc, eq, or, isNull, lte, gte } from "drizzle-orm";
 import {
   storefrontBanners,
   type InsertStorefrontBanner,
-} from "../drizzle/schema";
-import { getDb } from "./db";
+} from "../drizzle/schema.js";
+import { getDb } from "./db.js";
 
 export async function listPublishedBanners() {
   const db = await getDb();

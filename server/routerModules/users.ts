@@ -1,7 +1,7 @@
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
-import { adminProcedure, router } from "../_core/trpc";
-import { listFirebaseUsers, updateFirebaseUserRole } from "../firebaseData";
+import { adminProcedure, router } from "../_core/trpc.js";
+import { listFirebaseUsers, updateFirebaseUserRole } from "../firebaseData.js";
 
 export const usersRouter = router({
   list: adminProcedure.query(async () => listFirebaseUsers()),

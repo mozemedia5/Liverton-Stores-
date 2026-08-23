@@ -1,5 +1,5 @@
-import type { User } from "../drizzle/schema";
-import { getFirebaseAdmin } from "./firebaseAdmin";
+import type { User } from "../drizzle/schema.js";
+import { getFirebaseAdmin } from "./firebaseAdmin.js";
 
 function asDate(value: unknown, fallback = new Date()) {
   if (value && typeof value === "object" && "toDate" in value && typeof value.toDate === "function") return value.toDate() as Date;

@@ -1,9 +1,9 @@
 import { z } from "zod";
-import { adminProcedure, router } from "../_core/trpc";
+import { adminProcedure, router } from "../_core/trpc.js";
 import {
   CLOUDINARY_RESOURCE_TYPES,
   createCloudinaryUploadSignature,
-} from "../_core/cloudinary";
+} from "../_core/cloudinary.js";
 
 export const cloudinaryRouter = router({
   signUpload: adminProcedure

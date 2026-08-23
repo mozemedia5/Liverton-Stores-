@@ -1,5 +1,5 @@
 import crypto from "node:crypto";
-import { getFirebaseAdmin } from "./firebaseAdmin";
+import { getFirebaseAdmin } from "./firebaseAdmin.js";
 
 export type ShopifyWebhookResult = {
   duplicate: boolean;

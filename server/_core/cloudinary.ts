@@ -1,6 +1,6 @@
 import { v2 as cloudinary } from "cloudinary";
 import { TRPCError } from "@trpc/server";
-import { ENV } from "./env";
+import { ENV } from "./env.js";
 
 export const CLOUDINARY_RESOURCE_TYPES = ["image", "video", "raw"] as const;
 export type CloudinaryResourceType = (typeof CLOUDINARY_RESOURCE_TYPES)[number];

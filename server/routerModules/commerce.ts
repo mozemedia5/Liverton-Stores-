@@ -18,8 +18,8 @@ import {
   listProducts,
   removeCartLines,
   updateCartLines,
-} from "../_core/shopify";
-import { publicProcedure, router } from "../_core/trpc";
+} from "../_core/shopify.js";
+import { publicProcedure, router } from "../_core/trpc.js";
 
 const cartLineInputSchema = z.object({
   variantId: z.string().min(1),

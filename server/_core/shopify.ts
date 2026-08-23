@@ -269,7 +269,10 @@ const CART_FRAGMENT = /* GraphQL */ `
 // Catalog
 // ---------------------------------------------------------------------------
 
-type Edges<T> = { edges: Array<{ node: T }> };
+type PageInfo = { hasNextPage: boolean; endCursor: string | null };
+type Edges<T> = { edges: Array<{ node: T }>; pageInfo?: PageInfo };
+type PaginatedProductsResponse = { products: { edges: Array<{ node: RawProduct }>; pageInfo: PageInfo } };
+type PaginatedCollectionsResponse = { collections: { edges: Array<{ node: RawCollection }>; pageInfo: PageInfo } };
 
 export type ListProductsOptions = {
   first?: number;
@@ -329,6 +332,26 @@ export async function getProductByHandle(handle: string): Promise<Product> {
   return normalizeProduct(data.productByHandle);
 }
 
+export async function listAllProducts(): Promise<Product[]> {
+  const products: Product[] = [];
+  let after: string | null = null;
+  do {
+    const data: PaginatedProductsResponse = await storefrontFetch<PaginatedProductsResponse>(
+      `${PRODUCT_FRAGMENT}
+       query listAllProducts($first: Int!, $after: String) {
+         products(first: $first, after: $after, sortKey: TITLE) {
+           pageInfo { hasNextPage endCursor }
+           edges { node { ...ProductFields } }
+         }
+       }`,
+      { first: 100, after }
+    );
+    products.push(...data.products.edges.map(e => normalizeProduct(e.node)));
+    after = data.products.pageInfo.hasNextPage ? data.products.pageInfo.endCursor : null;
+  } while (after);
+  return products;
+}
+
 export async function listCollections(first: number = 10): Promise<Collection[]> {
   const data = await storefrontFetch<{ collections: Edges<RawCollection> }>(
     `${COLLECTION_FRAGMENT}
@@ -340,6 +363,26 @@ export async function listCollections(first: number = 10): Promise<Collection[]>
     { first }
   );
   return data.collections.edges.map(e => normalizeCollection(e.node));
+}
+
+export async function listAllCollections(): Promise<Collection[]> {
+  const collections: Collection[] = [];
+  let after: string | null = null;
+  do {
+    const data: PaginatedCollectionsResponse = await storefrontFetch<PaginatedCollectionsResponse>(
+      `${COLLECTION_FRAGMENT}
+       query listAllCollections($first: Int!, $after: String) {
+         collections(first: $first, after: $after) {
+           pageInfo { hasNextPage endCursor }
+           edges { node { ...CollectionFields } }
+         }
+       }`,
+      { first: 100, after }
+    );
+    collections.push(...data.collections.edges.map(e => normalizeCollection(e.node)));
+    after = data.collections.pageInfo.hasNextPage ? data.collections.pageInfo.endCursor : null;
+  } while (after);
+  return collections;
 }
 
 export async function getCollectionByHandle(handle: string): Promise<Collection> {

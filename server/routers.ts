@@ -1,11 +1,31 @@
 import { publicProcedure, router } from "./_core/trpc.js";
 import { z } from "zod";
 import { commerceRouter } from "./routerModules/commerce.js";
+import { listAllCollections, listAllProducts } from "./_core/shopify.js";
+import { listFirebaseBanners } from "./firebaseData.js";
 import { CONTACT_EMAIL } from "../shared/contact.js";
 import { cloudinaryRouter } from "./routerModules/cloudinary.js";
 import { storefrontContentRouter } from "./routerModules/storefrontContent.js";
 import { usersRouter } from "./routerModules/users.js";
-import { generateHannaReply } from "./hanna.js";
+import { generateHannaReply, type HannaCatalogContext } from "./hanna.js";
+
+async function loadHannaCatalog(): Promise<HannaCatalogContext> {
+  const [productsResult, collectionsResult, bannersResult] = await Promise.allSettled([
+    listAllProducts(),
+    listAllCollections(),
+    listFirebaseBanners(true),
+  ]);
+  return {
+    products: productsResult.status === "fulfilled" ? productsResult.value : [],
+    collections: collectionsResult.status === "fulfilled" ? collectionsResult.value : [],
+    banners: bannersResult.status === "fulfilled" ? bannersResult.value : [],
+    sourceStatus: {
+      products: productsResult.status === "fulfilled" ? "available" : "unavailable",
+      collections: collectionsResult.status === "fulfilled" ? "available" : "unavailable",
+      banners: bannersResult.status === "fulfilled" ? "available" : "unavailable",
+    },
+  };
+}
 
 export const appRouter = router({
   commerce: commerceRouter,
@@ -29,7 +49,7 @@ export const appRouter = router({
   hanna: router({
     chat: publicProcedure
       .input(z.object({ messages: z.array(z.object({ role: z.enum(["user", "assistant", "system"]), content: z.string() })).min(1).max(30) }))
-      .mutation(({ input }) => generateHannaReply(input.messages)),
+      .mutation(async ({ input }) => generateHannaReply(input.messages, await loadHannaCatalog())),
   }),
   auth: router({
     me: publicProcedure.query(opts => opts.ctx.user),

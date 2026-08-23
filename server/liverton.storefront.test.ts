@@ -28,7 +28,8 @@ describe("Liverton storefront contract", () => {
   });
 
   it("supports storefront interactions, contact delivery, and banner slots", () => {
-    expect(app).toContain("liverton-cart-updated");
+    expect(app).toContain("const { itemCount } = useCart()");
+    expect(app).not.toContain("liverton-local-cart");
     expect(app).toContain("translateY(${shift}px)");
     expect(app).toContain("featuredShopify");
     expect(app).toContain("useShopifyCatalogSync");

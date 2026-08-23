@@ -1,6 +1,5 @@
 import type { CreateExpressContextOptions } from "@trpc/server/adapters/express";
 import type { User } from "../../drizzle/schema.js";
-import { getFirebaseAdmin } from "../firebaseAdmin.js";
 
 export type TrpcContext = {
   req: CreateExpressContextOptions["req"];
@@ -21,6 +20,7 @@ async function authenticateFirebaseRequest(req: CreateExpressContextOptions["req
   if (!idToken) return null;
 
   try {
+    const { getFirebaseAdmin } = await import("../firebaseAdmin.js");
     const { auth, firestore } = getFirebaseAdmin();
     const decoded = await auth.verifyIdToken(idToken);
     const profileRef = firestore.collection("users").doc(decoded.uid);

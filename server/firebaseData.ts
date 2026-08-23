@@ -1,5 +1,8 @@
 import type { User } from "../drizzle/schema.js";
-import { getFirebaseAdmin } from "./firebaseAdmin.js";
+async function getAdminServices() {
+  const { getFirebaseAdmin } = await import("./firebaseAdmin.js");
+  return getFirebaseAdmin();
+}
 
 function asDate(value: unknown, fallback = new Date()) {
   if (value && typeof value === "object" && "toDate" in value && typeof value.toDate === "function") return value.toDate() as Date;
@@ -23,13 +26,13 @@ function mapUser(id: string, data: FirebaseFirestore.DocumentData): User {
 }
 
 export async function listFirebaseUsers(): Promise<User[]> {
-  const { firestore } = getFirebaseAdmin();
+  const { firestore } = await getAdminServices();
   const snapshot = await firestore.collection("users").orderBy("createdAt", "desc").get();
   return snapshot.docs.map(doc => mapUser(doc.id, doc.data()));
 }
 
 export async function updateFirebaseUserRole(openId: string, role: "user" | "admin") {
-  const { auth, firestore } = getFirebaseAdmin();
+  const { auth, firestore } = await getAdminServices();
   const authUser = await auth.getUser(openId);
   const existingClaims = { ...(authUser.customClaims ?? {}) };
   if (role === "admin") existingClaims.admin = true;
@@ -85,7 +88,7 @@ function mapBanner(id: string, data: FirebaseFirestore.DocumentData): FirebaseBa
 }
 
 export async function listFirebaseBanners(publishedOnly = false): Promise<FirebaseBanner[]> {
-  const { firestore } = getFirebaseAdmin();
+  const { firestore } = await getAdminServices();
   const snapshot = await firestore.collection("storefront_banners").orderBy("position", "asc").get();
   const now = Date.now();
   return snapshot.docs.map(doc => mapBanner(doc.id, doc.data())).filter(banner => {
@@ -95,7 +98,7 @@ export async function listFirebaseBanners(publishedOnly = false): Promise<Fireba
 }
 
 export async function createFirebaseBanner(input: Omit<FirebaseBanner, "id" | "createdAt" | "updatedAt">) {
-  const { firestore } = getFirebaseAdmin();
+  const { firestore } = await getAdminServices();
   const ref = firestore.collection("storefront_banners").doc();
   const now = new Date();
   await ref.set({ ...input, createdAt: now, updatedAt: now });
@@ -103,7 +106,7 @@ export async function createFirebaseBanner(input: Omit<FirebaseBanner, "id" | "c
 }
 
 export async function updateFirebaseBanner(id: string, input: Partial<Omit<FirebaseBanner, "id" | "createdAt" | "updatedAt">>) {
-  const { firestore } = getFirebaseAdmin();
+  const { firestore } = await getAdminServices();
   const ref = firestore.collection("storefront_banners").doc(id);
   await ref.set({ ...input, updatedAt: new Date() }, { merge: true });
   const snapshot = await ref.get();

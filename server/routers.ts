@@ -1,5 +1,4 @@
 import { publicProcedure, router } from "./_core/trpc.js";
-import { getFirebaseAdmin } from "./firebaseAdmin.js";
 import { z } from "zod";
 import { commerceRouter } from "./routerModules/commerce.js";
 import { CONTACT_EMAIL } from "../shared/contact.js";
@@ -22,6 +21,7 @@ export const appRouter = router({
       channel: z.enum(["email", "whatsapp"]),
     }))
     .mutation(async ({ input }) => {
+      const { getFirebaseAdmin } = await import("./firebaseAdmin.js");
       const { firestore } = getFirebaseAdmin();
       await firestore.collection("contact_messages").add({ ...input, createdAt: new Date() });
       return { stored: true, delivered: false, destination: input.channel === "email" ? CONTACT_EMAIL : "+256705954597" };

@@ -23,7 +23,7 @@ import type {
   ProductOption,
   ProductVariant,
   SelectedOption,
-} from "@shared/commerce/types";
+} from "../../shared/commerce/types";
 
 // ---- Raw Shopify shapes (kept private to this file) ----
 

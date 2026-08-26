@@ -1,7 +1,7 @@
 import type { User } from "../drizzle/schema.js";
 async function getAdminServices() {
-  const { getFirebaseAdmin } = await import("./firebaseAdmin.js");
-  return getFirebaseAdmin();
+  const { getFirebaseFirestore } = await import("./firebaseFirestore.js");
+  return getFirebaseFirestore();
 }
 
 function asDate(value: unknown, fallback = new Date()) {
@@ -32,7 +32,8 @@ export async function listFirebaseUsers(): Promise<User[]> {
 }
 
 export async function updateFirebaseUserRole(openId: string, role: "user" | "admin") {
-  const { auth, firestore } = await getAdminServices();
+  const { getFirebaseAdmin } = await import("./firebaseAdmin.js");
+  const { auth, firestore } = await getFirebaseAdmin();
   const authUser = await auth.getUser(openId);
   const existingClaims = { ...(authUser.customClaims ?? {}) };
   if (role === "admin") existingClaims.admin = true;

@@ -1,5 +1,5 @@
 import crypto from "node:crypto";
-import { getFirebaseAdmin } from "./firebaseAdmin.js";
+import { getFirebaseFirestore } from "./firebaseFirestore.js";
 
 export type ShopifyWebhookResult = {
   duplicate: boolean;
@@ -30,7 +30,7 @@ export async function processShopifyWebhook(input: {
   eventId?: string;
   triggeredAt?: string;
 }): Promise<ShopifyWebhookResult> {
-  const { firestore } = getFirebaseAdmin();
+  const { firestore } = getFirebaseFirestore();
   const deliveryRef = firestore.collection("shopify_webhook_events").doc(input.webhookId);
   const syncRef = firestore.collection("shopify_sync").doc("catalog");
   const receivedAt = new Date();

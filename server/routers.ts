@@ -41,8 +41,8 @@ export const appRouter = router({
       channel: z.enum(["email", "whatsapp"]),
     }))
     .mutation(async ({ input }) => {
-      const { getFirebaseAdmin } = await import("./firebaseAdmin.js");
-      const { firestore } = getFirebaseAdmin();
+      const { getFirebaseFirestore } = await import("./firebaseFirestore.js");
+      const { firestore } = getFirebaseFirestore();
       await firestore.collection("contact_messages").add({ ...input, createdAt: new Date() });
       return { stored: true, delivered: false, destination: input.channel === "email" ? CONTACT_EMAIL : "+256705954597" };
     }),

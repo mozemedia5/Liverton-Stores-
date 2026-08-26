@@ -92,7 +92,7 @@ describe("commerce.products", () => {
 
     // Endpoint should hit the pinned API version.
     const [url, init] = fetchMock.mock.calls[0];
-    expect(String(url)).toMatch(/\/api\/2025-04\/graphql\.json$/);
+    expect(String(url)).toMatch(/\/api\/2026-07\/graphql\.json$/);
     expect((init as RequestInit).headers).toMatchObject({
       "X-Shopify-Storefront-Access-Token": "test-token",
     });

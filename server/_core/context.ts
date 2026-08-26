@@ -21,7 +21,7 @@ async function authenticateFirebaseRequest(req: CreateExpressContextOptions["req
 
   try {
     const { getFirebaseAdmin } = await import("../firebaseAdmin.js");
-    const { auth, firestore } = getFirebaseAdmin();
+    const { auth, firestore } = await getFirebaseAdmin();
     const decoded = await auth.verifyIdToken(idToken);
     const profileRef = firestore.collection("users").doc(decoded.uid);
     const profileSnapshot = await profileRef.get();

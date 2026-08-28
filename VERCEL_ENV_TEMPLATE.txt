@@ -2,17 +2,19 @@
 # Add these names in both Preview and Production. Enter values only in Vercel.
 
 # Firebase Console → Project settings → Your apps → Web app configuration
-# Put apiKey, authDomain, databaseURL (if enabled), projectId,
-# storageBucket, messagingSenderId, and appId into this one JSON value.
+# Store as one-line JSON. Required keys: apiKey, authDomain, projectId, appId.
 VITE_FIREBASE_CONFIG_JSON=
 
 # Firebase Console → Project settings → Service accounts → Generate new private key
 # Paste the complete service-account JSON as a server-only Vercel value.
 FIREBASE_SERVICE_ACCOUNT_JSON=
 
-# Shopify Storefront API
+# Shopify Storefront API. Domain must be exactly your-shop-name.myshopify.com.
 SHOPIFY_STORE_DOMAIN=
+# Public Storefront token. Used when the private token below is absent.
 SHOPIFY_STOREFRONT_API_ACCESS_TOKEN=
+# Optional private Storefront token. Takes precedence and stays server-only.
+SHOPIFY_STOREFRONT_PRIVATE_ACCESS_TOKEN=
 
 # Hanna AI — server-only Gemini API access
 GEMINI_API_KEY=
@@ -31,5 +33,6 @@ SHOPIFY_WEBHOOK_CALLBACK_URL=
 # Banner media and copy are managed in Admin-Store; the storefront reads published media references from Firebase.
 
 # Do not add DATABASE_URL, JWT_SECRET, Manus OAuth variables, Manus Forge variables,
-# banner URL variables, or Firebase individual-field variables. Never prefix server
-# secrets with VITE_. Rotate any previously exposed credentials before use.
+# banner URL variables, or Firebase individual-field variables for the basic storefront.
+# Never prefix server secrets with VITE_. Never commit .env files or real values.
+# VITE_FIREBASE_CONFIG_JSON is embedded at build time; redeploy after changing it.

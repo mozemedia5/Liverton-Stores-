@@ -21,6 +21,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { getFirebaseAuth } from "@/lib/firebase";
+import { getFirebaseConfigError } from "@/lib/runtimeConfig";
 
 export type AuthPanelProps = {
   compact?: boolean;
@@ -73,6 +74,13 @@ function AppleMark() {
   );
 }
 
+function authConfigurationMessage() {
+  const issue = getFirebaseConfigError();
+  return issue
+    ? `Account sign-in is unavailable: ${issue}. Add it to Vercel Production and redeploy. You can continue as a guest.`
+    : "Account sign-in is unavailable. Check the Firebase Authentication provider settings or continue as a guest.";
+}
+
 function providerFor(kind: "google" | "apple") {
   if (kind === "google") return new GoogleAuthProvider();
   const provider = new OAuthProvider("apple.com");
@@ -98,7 +106,7 @@ export default function AuthPanel({ compact = false, onGuest }: AuthPanelProps) 
   const authenticateWithProvider = async (kind: "google" | "apple") => {
     const auth = getFirebaseAuth();
     if (!auth) {
-      setError("Sign-in is not configured yet. You can continue as a guest.");
+      setError(authConfigurationMessage());
       return;
     }
     setBusy(true);
@@ -122,7 +130,7 @@ export default function AuthPanel({ compact = false, onGuest }: AuthPanelProps) 
     event.preventDefault();
     const auth = getFirebaseAuth();
     if (!auth) {
-      setError("Account sign-in is not configured yet. You can continue as a guest.");
+      setError(authConfigurationMessage());
       return;
     }
     setBusy(true);
@@ -185,7 +193,7 @@ export default function AuthPanel({ compact = false, onGuest }: AuthPanelProps) 
   const resetPassword = async () => {
     const auth = getFirebaseAuth();
     if (!auth) {
-      setError("Password reset is not configured yet.");
+      setError(authConfigurationMessage());
       return;
     }
     if (!email.trim()) {

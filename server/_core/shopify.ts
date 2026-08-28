@@ -35,23 +35,41 @@ import {
 /**
  * Storefront API version pinned for the whole adapter.
  */
-export const SHOPIFY_API_VERSION = "2025-04";
+export const SHOPIFY_API_VERSION = "2026-07";
 
 /** Lazy env access — tests can override `process.env` before each case. */
+type ShopifyTokenKind = "private" | "public" | null;
+
 function getShopifyStoreDomain(): string {
-  return process.env.SHOPIFY_STORE_DOMAIN ?? "";
+  const raw = process.env.SHOPIFY_STORE_DOMAIN?.trim() ?? "";
+  return /^[-a-z0-9]+\.myshopify\.com$/i.test(raw) ? raw : "";
 }
-function getShopifyStorefrontToken(): string {
-  return (
-    process.env.SHOPIFY_STOREFRONT_PRIVATE_ACCESS_TOKEN ??
+
+function getShopifyStorefrontToken(): { value: string; kind: ShopifyTokenKind } {
+  const privateToken = process.env.SHOPIFY_STOREFRONT_PRIVATE_ACCESS_TOKEN?.trim();
+  if (privateToken) return { value: privateToken, kind: "private" };
+  const publicToken = (
     process.env.SHOPIFY_STOREFRONT_API_ACCESS_TOKEN ??
-    process.env.SHOPIFY_STOREFRONT_PUBLIC_ACCESS_TOKEN ??
-    ""
-  );
+    process.env.SHOPIFY_STOREFRONT_PUBLIC_ACCESS_TOKEN
+  )?.trim();
+  return publicToken ? { value: publicToken, kind: "public" } : { value: "", kind: null };
 }
+
+export function getShopifyConfigurationStatus() {
+  const token = getShopifyStorefrontToken();
+  return {
+    domainConfigured: Boolean(getShopifyStoreDomain()),
+    tokenConfigured: Boolean(token.value),
+    tokenType: token.kind,
+    apiVersion: SHOPIFY_API_VERSION,
+  };
+}
+
 export function isShopifyConfigured(): boolean {
-  return Boolean(getShopifyStoreDomain() && getShopifyStorefrontToken());
+  const status = getShopifyConfigurationStatus();
+  return status.domainConfigured && status.tokenConfigured;
 }
+
 function shopifyStorefrontEndpoint(): string {
   return `https://${getShopifyStoreDomain()}/api/${SHOPIFY_API_VERSION}/graphql.json`;
 }
@@ -88,7 +106,9 @@ async function storefrontFetch<T>(
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "X-Shopify-Storefront-Access-Token": getShopifyStorefrontToken(),
+        ...(getShopifyStorefrontToken().kind === "private"
+          ? { "Shopify-Storefront-Private-Token": getShopifyStorefrontToken().value }
+          : { "X-Shopify-Storefront-Access-Token": getShopifyStorefrontToken().value }),
       },
       body: JSON.stringify({ query, variables }),
     });

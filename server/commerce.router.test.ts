@@ -20,6 +20,7 @@ beforeEach(() => {
   vi.stubGlobal("fetch", fetchMock);
   process.env.SHOPIFY_STORE_DOMAIN = "test.myshopify.com";
   process.env.SHOPIFY_STOREFRONT_API_ACCESS_TOKEN = "test-token";
+  delete process.env.SHOPIFY_STOREFRONT_PRIVATE_ACCESS_TOKEN;
 });
 
 afterEach(() => {
@@ -67,6 +68,29 @@ const rawProduct = {
 };
 
 describe("commerce.products", () => {
+  it("uses the private Storefront token header when configured", async () => {
+    process.env.SHOPIFY_STOREFRONT_PRIVATE_ACCESS_TOKEN = "private-token";
+    ok({ products: { edges: [] } });
+
+    await appRouter.createCaller(makeCtx()).commerce.products.list();
+
+    const [, init] = fetchMock.mock.calls[0];
+    expect((init as RequestInit).headers).toMatchObject({
+      "Shopify-Storefront-Private-Token": "private-token",
+    });
+    expect((init as RequestInit).headers).not.toHaveProperty("X-Shopify-Storefront-Access-Token");
+  });
+
+  it("rejects a domain containing a URL or path as unconfigured", async () => {
+    process.env.SHOPIFY_STORE_DOMAIN = "https://test.myshopify.com/admin";
+    const caller = appRouter.createCaller(makeCtx());
+
+    await expect(caller.commerce.products.list()).rejects.toMatchObject({
+      code: "INTERNAL_SERVER_ERROR",
+      message: "Shopify Storefront API is not configured",
+    });
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
   it("normalizes the Storefront response into backend-agnostic Product shapes", async () => {
     ok({ products: { edges: [{ node: rawProduct }] } });
 
@@ -92,7 +116,7 @@ describe("commerce.products", () => {
 
     // Endpoint should hit the pinned API version.
     const [url, init] = fetchMock.mock.calls[0];
-    expect(String(url)).toMatch(/\/api\/2025-04\/graphql\.json$/);
+    expect(String(url)).toMatch(/\/api\/2026-07\/graphql\.json$/);
     expect((init as RequestInit).headers).toMatchObject({
       "X-Shopify-Storefront-Access-Token": "test-token",
     });

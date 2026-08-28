@@ -3,12 +3,24 @@ import express from "express";
 import { createExpressMiddleware } from "@trpc/server/adapters/express";
 import { appRouter } from "../server/routers.js";
 import { createContext } from "../server/_core/context.js";
-import { listProducts } from "../server/_core/shopify.js";
+import { getShopifyConfigurationStatus, listProducts } from "../server/_core/shopify.js";
+import { parseFirebaseServiceAccount } from "../server/firebaseAdmin.js";
 import { buildPublicCatalogResponse } from "../server/publicCatalog.js";
 
 const app = express();
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
+app.get("/api/health/config", (_req, res) => {
+  const shopify = getShopifyConfigurationStatus();
+  res.json({
+    firebaseClientConfigured: Boolean(process.env.VITE_FIREBASE_CONFIG_JSON),
+    firebaseAdminConfigured: Boolean(parseFirebaseServiceAccount()),
+    shopifyDomainConfigured: shopify.domainConfigured,
+    shopifyTokenConfigured: shopify.tokenConfigured,
+    shopifyTokenType: shopify.tokenType,
+    shopifyApiVersion: shopify.apiVersion,
+  });
+});
 app.get("/api/public/catalog.json", async (_req, res) => {
   try {
     const products = await listProducts({ first: 100 });

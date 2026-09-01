@@ -24,8 +24,10 @@ export function PremiumNavbar({ openCart }: { openCart: () => void }) {
   const { itemCount } = useCart();
   const isActive = (href: string) => href === "/" ? location === "/" : location.startsWith(href);
   return <header className="premium-navbar">
-    <Link href="/" className="brand" onClick={() => goTop()}><BrandMark /> <span>Liverton</span></Link>
-    <nav className="premium-nav-links" aria-label="Primary navigation">{navLinks.map(([href, label]) => <Link key={href} href={href} className={`nav-link ${isActive(href) ? "active" : ""}`} aria-current={isActive(href) ? "page" : undefined} onClick={() => goTop()}>{label}</Link>)}</nav>
+    <div className="premium-navbar-left">
+      <Link href="/" className="brand" onClick={() => goTop()}><BrandMark /> <span>Liverton</span></Link>
+      <nav className="premium-nav-links" aria-label="Primary navigation">{navLinks.map(([href, label]) => <Link key={href} href={href} className={`nav-link ${isActive(href) ? "active" : ""}`} aria-current={isActive(href) ? "page" : undefined} onClick={() => goTop()}>{label}</Link>)}</nav>
+    </div>
     <div className="nav-actions"><Link href="/account" className="account-link" aria-label="Open account"><UserRound size={18} /><span>Account</span></Link><button className="nav-icon cart-button" onClick={openCart} aria-label={`Open cart, ${itemCount} items`}><ShoppingBag size={18} /><span>{itemCount}</span></button><button className="menu-button" onClick={() => setMobile(true)} aria-label="Open menu"><Menu size={21} /></button></div>
     <Sheet open={mobile} onOpenChange={setMobile}><SheetContent side="right" className="premium-mobile-sheet"><SheetHeader><SheetTitle><span className="brand"><BrandMark /> Liverton</span></SheetTitle></SheetHeader><nav className="mobile-nav" aria-label="Mobile primary navigation">{navLinks.map(([href, label]) => <Link key={href} href={href} onClick={() => { setMobile(false); goTop(); }}>{label}<ArrowRight size={16} /></Link>)}<Link href="/account" className="mobile-account" onClick={() => setMobile(false)}><UserRound size={18} /> Account</Link><button className="mobile-cart" onClick={() => { setMobile(false); openCart(); }}><ShoppingBag size={18} /> Cart <span>{itemCount}</span></button></nav></SheetContent></Sheet>
   </header>;

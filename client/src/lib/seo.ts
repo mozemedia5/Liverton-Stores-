@@ -16,63 +16,63 @@ type SeoConfig = {
 
 const routeSeo: Record<string, SeoConfig> = {
   "/": {
-    title: "Liverton — Technology that makes room for life",
-    description: "Discover thoughtfully designed Liverton technology, from audio and wearables to computing and connected living.",
+    title: "Nexus Store — Fashion that moves with you",
+    description: "Discover thoughtfully designed Nexus Store fashion and apparel, from everyday layers and tailoring to dresses, shoes, and bags.",
     kind: "website",
   },
   "/products": {
-    title: "Products — Liverton",
-    description: "Explore the Liverton collection of audio, wearables, computing, mobile, spatial, and smart-home products.",
+    title: "Products — Nexus Store",
+    description: "Explore the Nexus Store collection of women’s, men’s, dresses, shoes, bags, and everyday apparel.",
     kind: "collection",
   },
   "/new-arrivals": {
-    title: "New Arrivals — Liverton",
-    description: "Meet the newest Liverton products, with fresh ideas for familiar daily rituals.",
+    title: "New Arrivals — Nexus Store",
+    description: "Meet the newest Nexus Store products, with fresh ideas for familiar daily rituals.",
     kind: "collection",
   },
   "/shop": {
-    title: "Shop — Liverton",
-    description: "Shop Liverton technology and find considered devices for work, home, movement, and focus.",
+    title: "Shop — Nexus Store",
+    description: "Shop Nexus Store fashion and find considered pieces for work, weekends, movement, and evenings.",
     kind: "collection",
   },
   "/about": {
-    title: "About Liverton — Technology with intention",
-    description: "Learn how Liverton builds generous technology that returns attention and feels good to use every day.",
+    title: "About Nexus Store — Fashion with intention",
+    description: "Learn how Nexus Store curates fashion that feels good to wear, live in, and return to every day.",
     kind: "website",
   },
   "/innovation": {
-    title: "Innovation — Liverton Labs",
-    description: "Explore Liverton research into ambient computing, energy, spatial interfaces, and more natural technology.",
+    title: "Innovation — Nexus Store Labs",
+    description: "Explore the Nexus Store point of view on personal style, considered materials, and modern dressing.",
     kind: "website",
   },
   "/solutions": {
-    title: "Solutions — Liverton",
-    description: "Liverton solutions help teams bring better technology into education, healthcare, retail, and creative work.",
+    title: "Solutions — Nexus Store",
+    description: "Nexus Store makes it easier to find thoughtful fashion and apparel for every category of life.",
     kind: "website",
   },
   "/support": {
-    title: "Support — Liverton",
-    description: "Find Liverton setup, delivery, warranty, returns, and product support with help from Hanna.",
+    title: "Support — Nexus Store",
+    description: "Find Nexus Store setup, delivery, warranty, returns, and product support with help from Hanna.",
     kind: "support",
   },
   "/contact": {
-    title: "Contact Liverton",
-    description: "Contact the Liverton team by email or WhatsApp without leaving the storefront.",
+    title: "Contact Nexus Store",
+    description: "Contact the Nexus Store team by email or WhatsApp without leaving the storefront.",
     kind: "website",
   },
   "/status": {
-    title: "Service Status — Liverton",
-    description: "Check the current operating status of Liverton storefront, checkout, support, and delivery services.",
+    title: "Service Status — Nexus Store",
+    description: "Check the current operating status of Nexus Store storefront, checkout, support, and delivery services.",
     kind: "utility",
   },
   "/privacy": {
-    title: "Privacy Policy — Liverton",
-    description: "Read how Liverton uses information to provide products, process orders, and improve support.",
+    title: "Privacy Policy — Nexus Store",
+    description: "Read how Nexus Store uses information to provide products, process orders, and improve support.",
     kind: "utility",
   },
   "/terms": {
-    title: "Terms of Service — Liverton",
-    description: "Read the clear, practical terms for using Liverton products and services.",
+    title: "Terms of Service — Nexus Store",
+    description: "Read the clear, practical terms for using Nexus Store products and services.",
     kind: "utility",
   },
 };
@@ -111,10 +111,11 @@ function upsertJsonLd(value: unknown) {
 export function getSeoConfig(pathname: string): SeoConfig {
   const normalized = pathname.replace(/\/$/, "") || "/";
   if (routeSeo[normalized]) return routeSeo[normalized];
-  if (/^\/product\/[^/]+$/.test(normalized)) return { title: "Product details — Liverton", description: "Explore detailed product information, reviews, variants, and secure checkout at Liverton Stores.", kind: "website" };
-  if (normalized === "/account") return { title: "Your account — Liverton", description: "Sign in or create a Liverton account, manage orders, and get customer support.", kind: "website" };
-  if (normalized === "/checkout") return { title: "Checkout — Liverton", description: "Review your Liverton collection and continue to secure checkout.", kind: "utility" };
-  return { title: "Page not found — Liverton", description: "The Liverton page you requested could not be found.", kind: "utility", noindex: true };
+  if (/^\/product\/[^/]+$/.test(normalized)) return { title: "Product details — Nexus Store", description: "Explore detailed product information, reviews, variants, and secure checkout at Nexus Store.", kind: "website" };
+  if (normalized === "/account") return { title: "Your account — Nexus Store", description: "Sign in or create a Nexus Store account, manage orders, and get customer support.", kind: "website" };
+  if (normalized === "/checkout") return { title: "Checkout — Nexus Store", description: "Review your Nexus Store collection and continue to secure checkout.", kind: "utility" };
+  if (normalized === "/track-order") return { title: "Track your order — Nexus Store", description: "Find the latest delivery information for your Nexus Store order.", kind: "utility" };
+  return { title: "Page not found — Nexus Store", description: "The Nexus Store page you requested could not be found.", kind: "utility", noindex: true };
 }
 
 export function applySeo(pathname: string, products: SeoProduct[] = []) {
@@ -123,7 +124,7 @@ export function applySeo(pathname: string, products: SeoProduct[] = []) {
   const origin = window.location.origin;
   const canonicalPath = pathname === "/" ? "/" : pathname.replace(/\/$/, "");
   const canonical = `${origin}${canonicalPath}`;
-  const pageName = config.title.replace(/ — Liverton$/, "");
+  const pageName = config.title.replace(/ — Nexus Store$/, "");
 
   document.documentElement.lang = "en";
   document.title = config.title;
@@ -133,7 +134,7 @@ export function applySeo(pathname: string, products: SeoProduct[] = []) {
   upsertMeta("property", "og:description", config.description);
   upsertMeta("property", "og:type", "website");
   upsertMeta("property", "og:url", canonical);
-  upsertMeta("property", "og:site_name", "Liverton");
+  upsertMeta("property", "og:site_name", "Nexus Store");
   upsertMeta("name", "twitter:card", "summary_large_image");
   upsertMeta("name", "twitter:title", config.title);
   upsertMeta("name", "twitter:description", config.description);
@@ -147,9 +148,9 @@ export function applySeo(pathname: string, products: SeoProduct[] = []) {
     {
       "@context": "https://schema.org",
       "@type": "Organization",
-      name: "Liverton",
+      name: "Nexus Store",
       url: origin,
-      description: "Thoughtfully designed consumer technology for everyday life.",
+      description: "Thoughtfully designed fashion and apparel for everyday life.",
     },
     {
       "@context": "https://schema.org",
@@ -157,7 +158,7 @@ export function applySeo(pathname: string, products: SeoProduct[] = []) {
       name: config.title,
       description: config.description,
       url: canonical,
-      isPartOf: { "@type": "WebSite", name: "Liverton", url: origin },
+      isPartOf: { "@type": "WebSite", name: "Nexus Store", url: origin },
     },
     {
       "@context": "https://schema.org",
@@ -192,10 +193,10 @@ export function applySeo(pathname: string, products: SeoProduct[] = []) {
       "@context": "https://schema.org",
       "@type": "FAQPage",
       mainEntity: [
-        ["Set up a new Liverton device", "Power on your device and follow the on-screen setup wizard."],
-        ["What is the warranty period?", "Every Liverton product includes a standard two-year warranty."],
+        ["Set up a new Nexus Store device", "Power on your device and follow the on-screen setup wizard."],
+        ["What is the warranty period?", "Every Nexus Store product includes a standard two-year warranty."],
         ["How do I track my order?", "Open your order confirmation and choose Track order for carrier updates."],
-        ["Can I return a product?", "Start a return within 30 days and Liverton will guide you through the next steps."],
+        ["Can I return a product?", "Start a return within 30 days and Nexus Store will guide you through the next steps."],
       ].map(([name, text]) => ({ "@type": "Question", name, acceptedAnswer: { "@type": "Answer", text } })),
     });
   }

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import { Link, useLocation } from "wouter";
-import { ArrowRight, ArrowUpRight, CheckCircle2, ChevronDown, ChevronLeft, ChevronRight, Headphones, HeartHandshake, Home, Instagram, LockKeyhole, Menu, MessageCircle, Music2, Package, Play, ShoppingBag, Sparkles, Star, Truck, Twitter, UserRound, X, Youtube } from "lucide-react";
+import { ArrowRight, ArrowUpRight, CheckCircle2, ChevronDown, ChevronLeft, ChevronRight, Headphones, HeartHandshake, Home, Instagram, LockKeyhole, Menu, MessageCircle, Music2, Package, Play, Search, ShoppingBag, Sparkles, Star, Truck, Twitter, UserRound, X, Youtube } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -20,15 +20,36 @@ function goTop(close?: () => void) { close?.(); requestAnimationFrame(() => wind
 
 export function PremiumNavbar({ openCart }: { openCart: () => void }) {
   const [mobile, setMobile] = useState(false);
-  const [location] = useLocation();
+  const [location, navigate] = useLocation();
   const { itemCount } = useCart();
+  const [searchQuery, setSearchQuery] = useState("");
   const isActive = (href: string) => href === "/" ? location === "/" : location.startsWith(href);
+
+  useEffect(() => {
+    const queryString = location.includes("?") ? location.slice(location.indexOf("?")) : "";
+    setSearchQuery(new URLSearchParams(queryString).get("search") ?? "");
+  }, [location]);
+
+  const submitSearch = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const query = searchQuery.trim();
+    navigate(query ? `/products?search=${encodeURIComponent(query)}` : "/products");
+    setMobile(false);
+    goTop();
+  };
+
   return <header className="premium-navbar">
     <div className="premium-navbar-left">
+      <button className="menu-button mobile-menu-trigger" onClick={() => setMobile(true)} aria-label="Open menu"><Menu size={21} /></button>
       <Link href="/" className="brand" onClick={() => goTop()}><BrandMark /> <span>Nexus Store</span></Link>
       <nav className="premium-nav-links" aria-label="Primary navigation">{navLinks.map(([href, label]) => <Link key={href} href={href} className={`nav-link ${isActive(href) ? "active" : ""}`} aria-current={isActive(href) ? "page" : undefined} onClick={() => goTop()}>{label}</Link>)}</nav>
+      <form className="floating-search" role="search" onSubmit={submitSearch}>
+        <Search size={16} aria-hidden="true" />
+        <input value={searchQuery} onChange={event => setSearchQuery(event.target.value)} placeholder="Search products" aria-label="Search products" />
+        <button className="search-submit" type="submit" aria-label="Search products"><ArrowRight size={14} /></button>
+      </form>
     </div>
-    <div className="nav-actions"><Link href="/account" className="account-link" aria-label="Open account"><UserRound size={18} /><span>Account</span></Link><button className="nav-icon cart-button" onClick={openCart} aria-label={`Open cart, ${itemCount} items`}><ShoppingBag size={18} /><span>{itemCount}</span></button><button className="menu-button" onClick={() => setMobile(true)} aria-label="Open menu"><Menu size={21} /></button></div>
+    <div className="nav-actions"><Link href="/account" className="account-link" aria-label="Open account"><UserRound size={18} /><span>Account</span></Link><button className="nav-icon cart-button" onClick={openCart} aria-label={`Open cart, ${itemCount} items`}><ShoppingBag size={18} /><span>{itemCount}</span></button></div>
     <Sheet open={mobile} onOpenChange={setMobile}><SheetContent side="right" className="premium-mobile-sheet"><SheetHeader><SheetTitle><span className="brand"><BrandMark /> Nexus Store</span></SheetTitle></SheetHeader><nav className="mobile-nav" aria-label="Mobile primary navigation">{navLinks.map(([href, label]) => <Link key={href} href={href} onClick={() => { setMobile(false); goTop(); }}>{label}<ArrowRight size={16} /></Link>)}<Link href="/account" className="mobile-account" onClick={() => setMobile(false)}><UserRound size={18} /> Account</Link><button className="mobile-cart" onClick={() => { setMobile(false); openCart(); }}><ShoppingBag size={18} /> Cart <span>{itemCount}</span></button></nav></SheetContent></Sheet>
   </header>;
 }
